@@ -31,7 +31,11 @@ This environment variable is used to pass extra options to the cronjob [script](
 
 You can pass multiple comma-separated RSS feed links to `RSS_FEED` variable in the run command.
 You can also pass multiple sets of `TV_OPTS` (comma-separated, eg: `TV_OPTS=-s 720p,-s eztv` can also be passed.
-Note that the number of RSS feed links and set of TV_OPTS should be equal. The first RSS link will be used with first options set in `TV_OPTS`, second link for second options set, and so on.
+Note that the number of RSS feed links and set of `TV_OPTS` should be equal. The first RSS link will be used with first options set in `TV_OPTS`, second link for second options set, and so on.
+
+##### Email address
+
+Whenever a torrent download completes, an email will be sent out to this address as a notification. Omit this environment variable to disable notifications.
 
 ### Coming up
 
