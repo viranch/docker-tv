@@ -2,13 +2,18 @@
 Docker image containing home entertainment automation for Raspberry Pi
 
 ### How to use?
+
+[Install docker](https://docs.docker.com/installation/#installation)
+
+Then simply run:
+
 ```
 docker run -d --privileged --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data -p 80:80 viranch/tv
 ```
 
 ### What does it contain?
 
-- Transmission server that watches `/data/watch` for torrent files.
+- [Transmission](http://www.transmissionbt.com/) server for downloading media from torrents.
 - Apache web server hosting downloads directory and transmission interface (http://your-ip/downloads, http://your-ip/transmission).
 - Cron daemon with a daily job that looks for new episodes from the RSS link provided in run command.
 
