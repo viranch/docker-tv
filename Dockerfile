@@ -11,4 +11,8 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
     rm -f /lib/systemd/system/{multi-user,local-fs,basic}.target.wants/*; \
     rm -f /lib/systemd/system/sockets.target.wants/*{udev,initctl}*;
 
+RUN systemctl enable httpd
+EXPOSE 80
+VOLUME [ "/srv/http" ]
+
 CMD ["/usr/bin/init"]
