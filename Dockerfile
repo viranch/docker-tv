@@ -14,17 +14,16 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
 # Apache
 RUN systemctl enable httpd
 EXPOSE 80
-VOLUME [ "/srv/http" ]
 
 # Transmission
 RUN systemctl enable transmission
-ADD assets/transmission.json /var/lib/transmission/.config/transmission-daemon/settings.json
-RUN chown -R transmission: /var/lib/transmission
+ADD assets/transmission.json /opt/
 ADD assets/tr_email.sh /opt/scripts/tr_email.sh
 RUN chmod a+x /opt/scripts/tr_email.sh
 ADD assets/tr_httpd.conf /etc/httpd/conf/extra/transmission.conf
 RUN echo "Include conf/extra/transmission.conf" >> /etc/httpd/conf/httpd.conf
-RUN mkdir /opt/watch
+
+VOLUME [ "/data" ]
 
 # Run command
 ADD assets/start.sh /opt/
