@@ -8,7 +8,6 @@ python2 -c "for feed,opt in zip('$RSS_FEED'.split(','), '$TV_OPTS'.split(',')): 
     feed=`echo $s | cut -d',' -f1`
     opts=`echo $s | cut -d',' -f2`
     echo "30 4 * * * /opt/scripts/tv.sh -l $feed -o /opt/watch $opts" >> /tmp/tv.cron
-EOF
 done
 crontab /tmp/tv.cron
 
