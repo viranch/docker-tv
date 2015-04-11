@@ -36,6 +36,8 @@ Note that the number of RSS feed links and set of `TV_OPTS` should be equal. The
 ##### Email address
 
 Whenever a torrent download completes, an email will be sent out to this address as a notification. Omit this environment variable to disable notifications.
+If you're an iPhone user, get the [Boxcar2 app](https://boxcar.io/client) for push notifications. Once you sign up, you will get an email address (of the form `some_code@boxcar.io`), use that email address here and you'll get notifications straight on your iPhone.
+I have not found any _free_ Android app for push notifications yet, but most paid ones do have this push-by-email feature, you can use any email address here.
 
 ### Coming up
 
