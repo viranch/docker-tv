@@ -8,11 +8,12 @@ list() { l=`echo $@ | sed 's/,/" "/g'`; echo "(\"$l\")"; }
 eval FEEDS=`list $RSS_FEED`
 eval OPTS=`list $TV_OPTS`
 
+rm -f /opt/tv.cron
 for i in "${!FEEDS[@]}"; do
     feed="${FEEDS[$i]}"
     opts="${OPTS[$i]}"
-    echo "30 4 * * * /opt/scripts/tv.sh -l $feed -o /opt/watch $opts" >> /tmp/tv.cron
+    echo "30 4 * * * /opt/scripts/tv.sh -l $feed -o /opt/watch $opts" >> /opt/tv.cron
 done
-crontab /tmp/tv.cron
+crontab /opt/tv.cron
 
 exec /usr/bin/init
