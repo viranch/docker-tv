@@ -9,6 +9,7 @@ cat << EOF > /etc/systemd/system/transmission.service.d/env.conf
 [Service]
 User=root
 Environment="EMAIL=$EMAIL"
+ExecStart=
 ExecStart=/usr/bin/transmission-daemon -f -g /data/transmission
 EOF
 
