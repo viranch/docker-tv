@@ -11,7 +11,7 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
     rm -f /lib/systemd/system/sockets.target.wants/*{udev,initctl}*;
 
 # Install our stuff
-RUN pacman --noprogressbar --noconfirm -S apache dnsutils s-nail transmission-cli python2 cronie
+RUN pacman --noprogressbar --noconfirm -S apache dnsutils s-nail transmission-cli cronie
 
 # Add transmission related files
 ADD assets/tr_service.conf /etc/systemd/system/transmission.service.d/custom.conf
