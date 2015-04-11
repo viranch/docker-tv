@@ -7,8 +7,7 @@ ln -s /data/downloads /srv/http/downloads
 python2 -c "for feed,opt in zip('$RSS_FEED'.split(','), '$TV_OPTS'.split(',')): print feed+','+opt" | while read s; do
     feed=`echo $s | cut -d',' -f1`
     opts=`echo $s | cut -d',' -f2`
-    cat << EOF >> /tmp/tv.cron
-30 4 * * * /opt/scripts/tv.sh -l $feed -o /opt/watch $opts
+    echo "30 4 * * * /opt/scripts/tv.sh -l $feed -o /opt/watch $opts" >> /tmp/tv.cron
 EOF
 done
 crontab /tmp/tv.cron
