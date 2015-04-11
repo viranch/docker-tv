@@ -17,6 +17,7 @@ EXPOSE 80
 
 # Transmission
 RUN systemctl enable transmission
+ADD assets/tr_service.conf /etc/systemd/system/transmission.service.d/custom.conf
 ADD assets/transmission.json /opt/
 ADD assets/tr_email.sh /opt/scripts/tr_email.sh
 RUN chmod a+x /opt/scripts/tr_email.sh
