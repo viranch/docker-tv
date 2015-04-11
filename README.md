@@ -3,10 +3,13 @@ Docker image containing home entertainment automation for Raspberry Pi
 
 ### How to use?
 
-[Install docker](https://docs.docker.com/installation/#installation)
+- Get a VPS or a [RaspberryPi](http://www.raspberrypi.org/)
 
-Then simply run:
+- Install [docker](https://docs.docker.com/installation/#installation) on it.
 
+- Create an account on [Followshows](http://followshows.com/) and follow your favourite shows. Get the link to the RSS feed (right side above the calendar on home page), it should be of the form: `http://followshows.com/feed/some_code`
+
+- Simply run:
 ```
 docker run -d --privileged --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data -p 80:80 viranch/tv
 ```
