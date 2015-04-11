@@ -9,7 +9,9 @@ Docker image containing home entertainment automation for Raspberry Pi
 
 - Create an account on [Followshows](http://followshows.com/) and follow your favourite shows. Get the link to the RSS feed (right side above the calendar on home page), it should be of the form: `http://followshows.com/feed/some_code`
 
-- Simply run:
+- Optionally, use your email address for push notifications on download complete.  If you're an iPhone user, get the [Boxcar2 app](https://boxcar.io/client) for push notifications. Once you sign up, you will get an email address (of the form `some_code@boxcar.io`), use it here and you'll get notifications straight on your iPhone. (I have not found any _free_ Android app for push notifications yet). Omit the `-e EMAIL=your@email.com` part in following command to disable notifications.
+
+- Ready to go, run:
 ```
 docker run -d --privileged --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data -p 80:80 viranch/tv
 ```
@@ -32,12 +34,6 @@ This environment variable is used to pass extra options to the cronjob [script](
 You can pass multiple comma-separated RSS feed links to `RSS_FEED` variable in the run command.
 You can also pass multiple sets of `TV_OPTS` (comma-separated, eg: `TV_OPTS=-s 720p,-s eztv` can also be passed.
 Note that the number of RSS feed links and set of `TV_OPTS` should be equal. The first RSS link will be used with first options set in `TV_OPTS`, second link for second options set, and so on.
-
-##### Email address
-
-Whenever a torrent download completes, an email will be sent out to this address as a notification. Omit this environment variable to disable notifications.
-If you're an iPhone user, get the [Boxcar2 app](https://boxcar.io/client) for push notifications. Once you sign up, you will get an email address (of the form `some_code@boxcar.io`), use that email address here and you'll get notifications straight on your iPhone.
-I have not found any _free_ Android app for push notifications yet, but most paid ones do have this push-by-email feature, you can use any email address here.
 
 ### Coming up
 
