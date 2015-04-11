@@ -34,4 +34,4 @@ Note that the number of RSS feed links and set of TV_OPTS should be equal. The f
 
 * [DLNA](http://en.wikipedia.org/wiki/Digital_Living_Network_Alliance) server for streaming your downloaded media straight to your DLNA-compliant TV.
 * A torrent search page in-built in the image, with direct "Add to download" button.
-* mpd for playing & controlling your music remotely.
+* [mpd](http://www.musicpd.org/) for playing & controlling your music remotely.
