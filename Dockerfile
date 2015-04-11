@@ -1,8 +1,7 @@
 FROM base/archlinux
 
+# Base pacman setup
 RUN pacman --noprogressbar --noconfirm -Syy archlinux-keyring
-
-RUN pacman --noprogressbar --noconfirm -S apache dnsutils s-nail transmission-cli python2 cronie
 
 # Source: https://rhatdan.wordpress.com/2014/04/30/running-systemd-within-a-docker-container/
 ENV container docker
@@ -11,27 +10,25 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
     rm -f /lib/systemd/system/{multi-user,local-fs,basic}.target.wants/*; \
     rm -f /lib/systemd/system/sockets.target.wants/*{udev,initctl}*;
 
-# Apache
-RUN systemctl enable httpd
-EXPOSE 80
+# Install our stuff
+RUN pacman --noprogressbar --noconfirm -S apache dnsutils s-nail transmission-cli python2 cronie
 
-# Transmission
-RUN systemctl enable transmission
+# Add transmission related files
 ADD assets/tr_service.conf /etc/systemd/system/transmission.service.d/custom.conf
 ADD assets/transmission.json /opt/
-ADD assets/tr_email.sh /opt/scripts/tr_email.sh
-RUN chmod a+x /opt/scripts/tr_email.sh
+ADD assets/tr_email.sh /opt/scripts/
 ADD assets/tv.sh /opt/scripts/
-RUN chmod a+x /opt/scripts/tv.sh
 ADD assets/tr_httpd.conf /etc/httpd/conf/extra/transmission.conf
-RUN echo "Include conf/extra/transmission.conf" >> /etc/httpd/conf/httpd.conf
 
-# Cron
-RUN systemctl enable cronie
+# Setup
+ADD assets/start.sh /opt/
+RUN systemctl enable httpd transmission cronie; \
+    chmod a+x /opt/scripts/tr_email.sh /opt/scripts/tv.sh /opt/start.sh; \
+    echo "Include conf/extra/transmission.conf" >> /etc/httpd/conf/httpd.conf
 
+# Declare binds
 VOLUME [ "/data" ]
+EXPOSE 80
 
 # Run command
-ADD assets/start.sh /opt/
-RUN chmod a+x /opt/start.sh
 CMD ["/opt/start.sh"]
