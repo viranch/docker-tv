@@ -25,7 +25,7 @@ docker run -d --privileged --name tv -e EMAIL=your@email.com -e RSS_FEED=http://
 - [Transmission](http://www.transmissionbt.com/) server for downloading media from torrents.
 - Apache web server hosting downloads directory and transmission interface (http://your-ip/downloads, http://your-ip/transmission).
 - Cron daemon with a daily job that looks for new episodes from the RSS link provided in run command.
-- [MiniDLNA](http://sourceforge.net/projects/minidlna/) media streaming server, streams the download directory, so anything downloaded with torrents is readily available for streaming to a TV or any UPnP?/DLNA client (eg, VLC Media Player).
+- [MiniDLNA](http://sourceforge.net/projects/minidlna/) media streaming server, streams the download directory, so anything downloaded with torrents is readily available for streaming to a TV or any UPnP/DLNA client (eg, VLC Media Player).
 
 ### Customizing
 
