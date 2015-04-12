@@ -42,7 +42,7 @@ Note that the number of RSS feed links and set of `TV_OPTS` should be equal. The
 
 ##### Media streaming server (MiniDLNA)
 
-The configuration for minidlna sits at `/etc/minidlna.conf` inside the container (access a running container with `docker exec -it tv bash`, where `tv` is the container name). You can copy it on the host, customize it and mount it with a new container using `-v /path/to/minidlna.conf:/etc/minidlna.conf`.
+The configuration for minidlna sits at `/etc/minidlna.conf` inside the container (access a running container with `docker exec -it tv bash`, where `tv` is the container name). You can copy it on the host, customize it and mount it with a new container using `-v /path/to/minidlna.conf:/etc/minidlna.conf` in the above run command.
 
 ### Coming up
 
