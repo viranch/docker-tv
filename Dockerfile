@@ -26,7 +26,7 @@ ADD assets/config/minidlna.conf /etc/minidlna.conf
 
 # Setup
 RUN systemctl enable httpd transmission cronie minidlna; \
-    chmod a+x /opt/scripts/tr_email.sh /opt/scripts/tv.sh /opt/scripts/start.sh; \
+    chmod a+x /opt/scripts/*; \
     echo "Include conf/extra/proxy.conf" >> /etc/httpd/conf/httpd.conf
 
 # Declare binds
