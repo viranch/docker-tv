@@ -3,7 +3,7 @@ Docker image containing home entertainment automation for Raspberry Pi
 
 ### How to use?
 
-- Get a VPS or a [RaspberryPi](http://www.raspberrypi.org/)
+- Get a VPS or a [RaspberryPi](http://www.raspberrypi.org/) and install any Linux OS (preferably, with a good docker support; choose one of Ubuntu & ArchLinux if in doubt).
 
 - Install [docker](https://docs.docker.com/installation/#installation) on it.
 
