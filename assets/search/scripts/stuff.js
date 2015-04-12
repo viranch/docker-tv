@@ -18,7 +18,7 @@ function search() {
                     title: item.find("title").text(),
                     link: item.find("link").text(),
                     torrent_link: "http://torcache.net/torrent/"+split_last(item.find("link").text(), "/").toUpperCase()+".torrent",
-                    date: item.find("pubDate").text(),
+                    date: (new Date(item.find("pubDate").text())).toISOString(),
                     info: item.find("description").text().replace(/ Hash: .*$/g, ''),
                 });
             });
@@ -76,11 +76,16 @@ function show() {
     // knock it out!
     $('#ko-parent > ul').remove(); $('#ko-parent').append(ko_elem);
     ko.applyBindings(ko_data, $('#ko-parent > ul')[0]);
-    $('#results').show();
 
     // target=_blank
     $('a').attr('target','_blank');
 
     // download
     $('.download-btn').click(download);
+
+    // time ago
+    $('time.timeago').timeago();
+
+    //show
+    $('#results').show();
 }
