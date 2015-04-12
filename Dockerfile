@@ -19,7 +19,7 @@ ADD assets/scripts/ /opt/scripts/
 ADD assets/config/transmission.json /opt/
 
 # httpd
-ADD assets/config/tr_httpd.conf /etc/httpd/conf/extra/transmission.conf
+ADD assets/config/httpd_proxy.conf /etc/httpd/conf/extra/proxy.conf
 
 # minidlna
 ADD assets/config/minidlna.conf /etc/minidlna.conf
@@ -27,7 +27,7 @@ ADD assets/config/minidlna.conf /etc/minidlna.conf
 # Setup
 RUN systemctl enable httpd transmission cronie minidlna; \
     chmod a+x /opt/scripts/tr_email.sh /opt/scripts/tv.sh /opt/scripts/start.sh; \
-    echo "Include conf/extra/transmission.conf" >> /etc/httpd/conf/httpd.conf
+    echo "Include conf/extra/proxy.conf" >> /etc/httpd/conf/httpd.conf
 
 # Declare binds
 VOLUME [ "/data" ]
