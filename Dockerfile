@@ -10,25 +10,28 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
         /lib/systemd/system/{multi-user,local-fs,basic}.target.wants/* \
         /lib/systemd/system/sockets.target.wants/*{udev,initctl}*
 
-# Install our stuff
-RUN pacman --noprogressbar --noconfirm -S openssl apache dnsutils s-nail transmission-cli cronie minidlna
-ADD assets/systemd/ /etc/systemd/system/
-ADD assets/scripts/ /opt/scripts/
-
-# transmission
-ADD assets/config/transmission.json /opt/
-
 # httpd
+RUN pacman --noprogressbar --noconfirm -S openssl apache
 ADD assets/config/httpd/ /etc/httpd/conf/
 
+# transmission
+RUN pacman --noprogressbar --noconfirm -S dnsutils s-nail transmission-cli
+ADD assets/config/transmission.json /opt/
+
 # minidlna
+RUN pacman --noprogressbar --noconfirm -S minidlna
 ADD assets/config/minidlna.conf /etc/minidlna.conf
 
 # search page
 ADD assets/search/ /srv/http/search/
 
+# Install our stuff
+RUN pacman --noprogressbar --noconfirm -S cronie
+ADD assets/scripts/ /opt/scripts/
+ADD assets/systemd/ /etc/systemd/system/
+
 # Setup
-RUN systemctl enable httpd transmission cronie minidlna; \
+RUN systemctl enable httpd transmission minidlna cronie; \
     chmod a+x /opt/scripts/*
 
 # Declare binds
