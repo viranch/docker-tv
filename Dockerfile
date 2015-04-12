@@ -13,11 +13,12 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
 # Install our stuff
 RUN pacman --noprogressbar --noconfirm -S apache dnsutils s-nail transmission-cli cronie minidlna
 
-# Add transmission related files
+# transmission
 ADD assets/tr_service.conf /etc/systemd/system/transmission.service.d/custom.conf
 ADD assets/transmission.json /opt/
-ADD assets/tr_email.sh /opt/scripts/
-ADD assets/tv.sh /opt/scripts/
+ADD assets/tr_email.sh assets/tv.sh assets/start.sh /opt/scripts/
+
+# httpd
 ADD assets/tr_httpd.conf /etc/httpd/conf/extra/transmission.conf
 
 # minidlna
@@ -25,9 +26,8 @@ ADD assets/dlna_service.conf /etc/systemd/system/minidlna.service.d/custom.conf
 ADD assets/minidlna.conf /etc/minidlna.conf
 
 # Setup
-ADD assets/start.sh /opt/
 RUN systemctl enable httpd transmission cronie minidlna; \
-    chmod a+x /opt/scripts/tr_email.sh /opt/scripts/tv.sh /opt/start.sh; \
+    chmod a+x /opt/scripts/tr_email.sh /opt/scripts/tv.sh /opt/scripts/start.sh; \
     echo "Include conf/extra/transmission.conf" >> /etc/httpd/conf/httpd.conf
 
 # Declare binds
@@ -35,4 +35,4 @@ VOLUME [ "/data" ]
 EXPOSE 80
 
 # Run command
-CMD ["/opt/start.sh"]
+CMD ["/opt/scripts/start.sh"]
