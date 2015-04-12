@@ -16,13 +16,13 @@ ADD assets/systemd/ /etc/systemd/system/
 ADD assets/scripts/ /opt/scripts/
 
 # transmission
-ADD assets/transmission.json /opt/
+ADD assets/config/transmission.json /opt/
 
 # httpd
-ADD assets/tr_httpd.conf /etc/httpd/conf/extra/transmission.conf
+ADD assets/config/tr_httpd.conf /etc/httpd/conf/extra/transmission.conf
 
 # minidlna
-ADD assets/minidlna.conf /etc/minidlna.conf
+ADD assets/config/minidlna.conf /etc/minidlna.conf
 
 # Setup
 RUN systemctl enable httpd transmission cronie minidlna; \
