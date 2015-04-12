@@ -12,17 +12,16 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
 
 # Install our stuff
 RUN pacman --noprogressbar --noconfirm -S apache dnsutils s-nail transmission-cli cronie minidlna
+ADD assets/systemd/ /etc/systemd/system/
+ADD assets/tr_email.sh assets/tv.sh assets/start.sh /opt/scripts/
 
 # transmission
-ADD assets/tr_service.conf /etc/systemd/system/transmission.service.d/custom.conf
 ADD assets/transmission.json /opt/
-ADD assets/tr_email.sh assets/tv.sh assets/start.sh /opt/scripts/
 
 # httpd
 ADD assets/tr_httpd.conf /etc/httpd/conf/extra/transmission.conf
 
 # minidlna
-ADD assets/dlna_service.conf /etc/systemd/system/minidlna.service.d/custom.conf
 ADD assets/minidlna.conf /etc/minidlna.conf
 
 # Setup
