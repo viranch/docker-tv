@@ -11,11 +11,11 @@ Docker image containing home entertainment automation for Raspberry Pi
 
 - Optionally, use your email address for download complete push notifications.  If you're an iPhone user, get the [Boxcar2 app](https://boxcar.io/client) for push notifications. Once you sign up, you will get an email address (of the form `some_code@boxcar.io`), use it here and you'll get notifications straight on your iPhone. (I have not found any _free_ Android app for push notifications yet). Omit the `-e EMAIL=your@email.com` part in following command to disable notifications.
 
-- If you want to use the media streaming server (eg, RaspberryPi on home network), run the following:
+- If you want to use the media streaming server (eg, on a RaspberryPi on home network), run the following:
 ```
 docker run -d --privileged --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data --net host viranch/tv
 ```
-- If don't want to use the media streaming server, (eg, when on a VPS), just change the `--net host` part in above command to `-p 80:80`:
+- If you don't want to use the media streaming server, (eg, when on a VPS), just change the `--net host` part in above command to `-p 80:80`:
 ```
 docker run -d --privileged --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data -p 80:80 viranch/tv
 ```
