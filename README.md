@@ -11,7 +11,11 @@ Docker image containing home entertainment automation for Raspberry Pi
 
 - Optionally, use your email address for push notifications on download complete.  If you're an iPhone user, get the [Boxcar2 app](https://boxcar.io/client) for push notifications. Once you sign up, you will get an email address (of the form `some_code@boxcar.io`), use it here and you'll get notifications straight on your iPhone. (I have not found any _free_ Android app for push notifications yet). Omit the `-e EMAIL=your@email.com` part in following command to disable notifications.
 
-- Ready to go, run:
+- If you want to use the media streaming server (eg, RaspberryPi on home network), run the following:
+```
+docker run -d --privileged --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data --net host viranch/tv
+```
+- If don't want to use the media streaming server, (eg when on a VPS), just change the `--net host` part in above command with `-p 80:80`:
 ```
 docker run -d --privileged --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data -p 80:80 viranch/tv
 ```
@@ -21,6 +25,7 @@ docker run -d --privileged --name tv -e EMAIL=your@email.com -e RSS_FEED=http://
 - [Transmission](http://www.transmissionbt.com/) server for downloading media from torrents.
 - Apache web server hosting downloads directory and transmission interface (http://your-ip/downloads, http://your-ip/transmission).
 - Cron daemon with a daily job that looks for new episodes from the RSS link provided in run command.
+- [MiniDLNA](http://sourceforge.net/projects/minidlna/) media streaming server, streams the download directory, so anything downloaded with torrents is readily available for streaming to a TV or any UPnP?/DLNA client (eg, VLC Media Player).
 
 ### Customizing
 
@@ -35,8 +40,11 @@ You can pass multiple comma-separated RSS feed links to `RSS_FEED` variable in t
 You can also pass multiple sets of `TV_OPTS` (comma-separated, eg: `TV_OPTS=-s 720p,-s eztv` can also be passed.
 Note that the number of RSS feed links and set of `TV_OPTS` should be equal. The first RSS link will be used with first options set in `TV_OPTS`, second link for second options set, and so on.
 
+##### Media streaming server (MiniDLNA)
+
+The configuration for minidlna sits at `/etc/minidlna.conf` inside the container (access a running container with `docker exec -it tv bash`, where `tv` is the container name). You can copy it on the host, customize it and mount it with a new container using `-v /path/to/minidlna.conf:/etc/minidlna.conf`.
+
 ### Coming up
 
-* [DLNA](http://en.wikipedia.org/wiki/Digital_Living_Network_Alliance) server for streaming your downloaded media straight to your DLNA-compliant TV.
 * A torrent search page in-built in the image, with direct "Add to download" button.
 * [mpd](http://www.musicpd.org/) for playing & controlling your music remotely.

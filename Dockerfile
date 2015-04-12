@@ -11,7 +11,7 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
         /lib/systemd/system/sockets.target.wants/*{udev,initctl}*
 
 # Install our stuff
-RUN pacman --noprogressbar --noconfirm -S apache dnsutils s-nail transmission-cli cronie
+RUN pacman --noprogressbar --noconfirm -S apache dnsutils s-nail transmission-cli cronie minidlna
 
 # Add transmission related files
 ADD assets/tr_service.conf /etc/systemd/system/transmission.service.d/custom.conf
@@ -20,9 +20,13 @@ ADD assets/tr_email.sh /opt/scripts/
 ADD assets/tv.sh /opt/scripts/
 ADD assets/tr_httpd.conf /etc/httpd/conf/extra/transmission.conf
 
+# minidlna
+ADD assets/dlna_service.conf /etc/systemd/system/minidlna.service.d/custom.conf
+ADD assets/minidlna.conf /etc/minidlna.conf
+
 # Setup
 ADD assets/start.sh /opt/
-RUN systemctl enable httpd transmission cronie; \
+RUN systemctl enable httpd transmission cronie minidlna; \
     chmod a+x /opt/scripts/tr_email.sh /opt/scripts/tv.sh /opt/start.sh; \
     echo "Include conf/extra/transmission.conf" >> /etc/httpd/conf/httpd.conf
 
