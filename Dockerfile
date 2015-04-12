@@ -19,15 +19,14 @@ ADD assets/scripts/ /opt/scripts/
 ADD assets/config/transmission.json /opt/
 
 # httpd
-ADD assets/config/httpd_proxy.conf /etc/httpd/conf/extra/proxy.conf
+ADD assets/config/httpd/ /etc/httpd/conf/
 
 # minidlna
 ADD assets/config/minidlna.conf /etc/minidlna.conf
 
 # Setup
 RUN systemctl enable httpd transmission cronie minidlna; \
-    chmod a+x /opt/scripts/*; \
-    echo "Include conf/extra/proxy.conf" >> /etc/httpd/conf/httpd.conf
+    chmod a+x /opt/scripts/*
 
 # Declare binds
 VOLUME [ "/data" ]
