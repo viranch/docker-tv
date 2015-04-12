@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <title>Torrent Search - Powered by torrentz.in</title>
+
+        <link href="images/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+
+        <!-- jquery -->
+        <script src="scripts/jquery-1.11.0.min.js"></script>
+        <script src="scripts/jquery-migrate-1.2.1.min.js"></script>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="scripts/bootstrap.min.js"></script>
+
+        <!-- ko -->
+        <script src="scripts/knockout-min.js"></script>
+
+        <!-- gitlab css dump -->
+        <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
+
+        <!-- transmission remote -->
+        <link rel="stylesheet" type="text/css" href="scripts/remote.js">
+
+        <!-- our style customizations -->
+        <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+        <!-- data model -->
+        <script src="scripts/stuff.js"></script>
+    </head>
+
+    <body>
+        <div class="container-fluid"><div class="row"><div class="col-md-10 col-md-offset-1">
+            <div class="col-md-10 col-md-offset-1">
+                <h1>Search for torrents</h1>
+                <div class="has-below"></div>
+                <div class="input-group">
+                    <input id="search-q" type="text" class="form-control" placeholder="Search for...">
+                    <span class="input-group-btn">
+                        <button id="search-btn" class="btn btn-info" type="button">
+                            <i class="icon icon-search search-btn"></i>
+                        </button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="has-below"></div>
+            <div id="results" class="col-md-10 col-md-offset-1">
+                <div class="panel panel-default panel-small" id="ko-parent">
+                    <ul id="ko-root" class="well-list issues-list" data-bind="foreach: results">
+                        <li class="issue">
+                            <div class="issue-title">
+                                <span class="str-truncated">
+                                    <a class="row_title" data-bind="attr: { href: link }, text: title"></a>
+                                </span>
+                            </div>
+                            <div class="issue-info">
+                                <span data-bind="text: info"></span>
+                            </div>
+                            <div class="issue-actions">
+                                <a class="btn btn-small btn-default download-btn" data-bind="attr: { href: torrent_link }">
+                                    <i class="icon icon-download-alt"></i>
+                                    &nbsp;
+                                    Download
+                                </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div></div></div>
+    </body>
+
+</html>

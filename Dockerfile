@@ -24,6 +24,9 @@ ADD assets/config/httpd/ /etc/httpd/conf/
 # minidlna
 ADD assets/config/minidlna.conf /etc/minidlna.conf
 
+# search page
+ADD assets/search/ /srv/http/search/
+
 # Setup
 RUN systemctl enable httpd transmission cronie minidlna; \
     chmod a+x /opt/scripts/*

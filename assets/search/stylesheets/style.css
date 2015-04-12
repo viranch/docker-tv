@@ -1,0 +1,13 @@
+.has-below {
+    padding-bottom: 20px;
+}
+
+#search-btn > i {
+  line-height: inherit;
+}
+
+.btn-info {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
