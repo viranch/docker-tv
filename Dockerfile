@@ -13,7 +13,7 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
 # Install our stuff
 RUN pacman --noprogressbar --noconfirm -S apache dnsutils s-nail transmission-cli cronie minidlna
 ADD assets/systemd/ /etc/systemd/system/
-ADD assets/tr_email.sh assets/tv.sh assets/start.sh /opt/scripts/
+ADD assets/scripts/ /opt/scripts/
 
 # transmission
 ADD assets/transmission.json /opt/
