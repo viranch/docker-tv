@@ -1,5 +1,5 @@
 # docker-tv
-Docker image containing home entertainment automation for Raspberry Pi
+Entertainment automation for home (RaspberryPi) and VPS in a docker image
 
 ### How to use?
 
