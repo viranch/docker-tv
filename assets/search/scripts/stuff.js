@@ -70,6 +70,7 @@ $(document).ready(function() {
     $('#results').hide();
     $('#search-btn').click(search);
     $('#search-q').keyup(function(e){ if(e.keyCode==13) $('#search-btn').click(); });
+    $('#search-q').focus();
 });
 
 function show() {
