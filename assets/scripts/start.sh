@@ -12,7 +12,7 @@ rm -f /opt/tv.cron
 for i in "${!FEEDS[@]}"; do
     feed="${FEEDS[$i]}"
     opts="${OPTS[$i]}"
-    echo "30 4 * * * /opt/scripts/tv.sh -l $feed -o /opt/watch $opts" >> /opt/tv.cron
+    echo "30 4 * * * /opt/scripts/tv.sh -l $feed -o /data/watch $opts" >> /opt/tv.cron
 done
 crontab /opt/tv.cron
 
