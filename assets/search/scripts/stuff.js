@@ -8,11 +8,21 @@ function split_last(string, delim) {
 }
 
 function search() {
+    $('#search-status').html('Searching...');
+
     $.ajax("/tz/feed?q="+encodeURIComponent($('#search-q').val()))
         .done(function(data) {
+            var items = $(data).find("item");
             ko_data.results.removeAll();
+
+            if (items.length == 0) {
+                $('#search-status').html('<i class="icon icon-warning-sign"></i> No search results! Try searching something else..');
+                return;
+            }
+
+            $('#search-status').html('&nbsp;');
             // knock it out!
-            $(data).find("item").each(function() {
+            items.each(function() {
                 var item = $(this);
                 ko_data.results.push({
                     title: item.find("title").text(),

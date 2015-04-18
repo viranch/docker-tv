@@ -2,6 +2,14 @@
     padding-bottom: 20px;
 }
 
+.has-below-small {
+    padding-bottom: 10px;
+}
+
+#search-status {
+  padding-left: 10px;
+}
+
 #search-btn > i {
   line-height: inherit;
 }
