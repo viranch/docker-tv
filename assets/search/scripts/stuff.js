@@ -1,4 +1,4 @@
-var ko_data = {};
+var ko_data = { results: ko.observableArray() };
 var ko_elem;
 var tr_token;
 
@@ -11,7 +11,8 @@ function search() {
     $(this).blur();
     $.ajax("/tz/feed?q="+encodeURIComponent($('#search-q').val()))
         .done(function(data) {
-            ko_data.results = [];
+            ko_data.results.removeAll();
+            // knock it out!
             $(data).find("item").each(function() {
                 var item = $(this);
                 ko_data.results.push({
@@ -22,7 +23,7 @@ function search() {
                     info: item.find("description").text().replace(/ Hash: .*$/g, ''),
                 });
             });
-            show();
+            setup_result_events();
         });
 }
 
@@ -66,18 +67,13 @@ function download() {
 }
 
 $(document).ready(function() {
-    ko_elem = $('#ko-parent').html();
-    $('#results').hide();
     $('#search-btn').click(search);
     $('#search-q').keyup(function(e){ if(e.keyCode==13) $('#search-btn').click(); });
     $('#search-q').focus();
+    ko.applyBindings(ko_data);
 });
 
-function show() {
-    // knock it out!
-    $('#ko-parent > ul').remove(); $('#ko-parent').append(ko_elem);
-    ko.applyBindings(ko_data, $('#ko-parent > ul')[0]);
-
+function setup_result_events() {
     // target=_blank
     $('a').attr('target','_blank');
 
@@ -86,7 +82,4 @@ function show() {
 
     // time ago
     $('time.timeago').timeago();
-
-    //show
-    $('#results').show();
 }

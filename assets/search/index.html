@@ -43,9 +43,9 @@
             </div>
 
             <div class="has-below"></div>
-            <div id="results" class="row">
-                <div class="panel panel-default panel-small" id="ko-parent">
-                    <ul id="ko-root" class="well-list issues-list" data-bind="foreach: results">
+            <div class="row" data-bind="if: results().length > 0">
+                <div class="panel panel-default panel-small">
+                    <ul class="well-list issues-list" data-bind="foreach: results">
                         <li class="issue">
                             <div class="issue-title">
                                 <span class="str-truncated">
