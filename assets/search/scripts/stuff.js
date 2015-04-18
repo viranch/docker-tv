@@ -60,16 +60,16 @@ function tr_request(data, callback) {
 
 function download() {
     var anchor = $(this);
-    var url = anchor.attr('href');
+    var url = anchor.prop('href');
     var o = { method: 'torrent-add', arguments: { filename: url } }
     tr_request(o, function() {
         anchor
             .unbind('click')
             .removeClass("btn-default")
             .addClass("btn-info")
-            .attr('href', '/transmission')
+            .prop('href', '/transmission')
             .html('<i class="icon icon-ok"></i>&nbsp;Added to download&nbsp;<i class="icon icon-chevron-right"></i>')
-            .attr('title', 'Visit download page')
+            .prop('title', 'Visit download page')
         ;
     });
     return false;
@@ -84,7 +84,7 @@ $(document).ready(function() {
 
 function setup_result_events() {
     // target=_blank
-    $('a').attr('target','_blank');
+    $('a').prop('target','_blank');
 
     // download
     $('.download-btn').click(download);
