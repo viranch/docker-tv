@@ -15,3 +15,8 @@
 .panel {
   border-radius: 4px;
 }
+
+input.form-control.simple:focus {
+  border-color: #cccccc;
+  box-shadow: none;
+}
