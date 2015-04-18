@@ -8,7 +8,6 @@ function split_last(string, delim) {
 }
 
 function search() {
-    $(this).blur();
     $.ajax("/tz/feed?q="+encodeURIComponent($('#search-q').val()))
         .done(function(data) {
             ko_data.results.removeAll();
