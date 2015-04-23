@@ -41,12 +41,16 @@ match=$(echo $link | grep -o "^http://followshows\.com/feed/[^/]\+$")
 test -z "$match" && echo "Invalid URL. Please visit followshows.com to generate your personalised URL" && exit 1
 test -d "$dirpath" || mkdir -p "$dirpath" 2>/dev/null || (echo "Invalid download path: $dirpath" && exit 2)
 
-function search() {
-    curl -s https://torrentz.in/feed?q="$@" | grep "<link>.*$" -o | head -n2 | grep -v "search?q=" | sed 's/<link>http:\/\/torrentz\.in\///g' | sed 's/<\/link>//g'
+function feed() {
+    curl -s https://torrentz.in/feed?q="$@"
     #cookie_file="/tmp/surecook"
     #rm -f $cookie_file
     #while [[ ! -f $cookie_file ]]; do curl -s -XHEAD https://www.suresome.com/ -c $cookie_file > /dev/null; done
-    #curl -s --compressed https://www.suresome.com/proxy/nph-secure/00A/http/torrentz.in/feed%3fq%3d"$@" -b $cookie_file | grep "<link>.*$" -o | head -n2 | grep -v "search?q=" | sed 's/<link>http:\/\/torrentz\.in\///g' | sed 's/<\/link>//g'
+    #curl -s --compressed https://www.suresome.com/proxy/nph-secure/00A/https/torrentz.in/feed%3fq%3d"$@" -b $cookie_file
+}
+
+function search() {
+    feed "$@" | grep "<link>.*$" -o | tail -n +2 | sed 's/<link>http:\/\/torrentz\.in\///g' | sed 's/<\/link>//g'
 }
 
 
@@ -55,14 +59,16 @@ function add_torrent() {
     test -n "$2" && title="$title $2"
     query=`echo "$title" | sed 's/ /+/g' | sed "s/'//g"`
     echo -n "Searching '$title'... "
-    hash=$(search $query)
-    if [[ -n $hash ]]; then
-        echo "found"
+    status="failed"
+    for hash in `search $query`; do
         fname="`echo $title | sed 's/ /./g'`.torrent"
-        curl -s --compressed http://torcache.net/torrent/$hash.torrent > "$dirpath/$fname"
-    else
-        echo "failed"
-    fi
+        wget -q http://torcache.net/torrent/$hash.torrent -O "$dirpath/$fname"
+        if [[ $? == 0 ]]; then
+            status="found"
+            break
+        fi
+    done
+    echo $status
 }
 
 # download .torrent for shows aired today
