@@ -12,14 +12,15 @@
 
 usage() {
     cat << EOF
-Usage: $0 -l <link-to-rss-feed> -o <output-directory> [-s <search-suffix>]
+Usage: $0 -l <link-to-rss-feed> -o <output-directory> [-s <search-suffix>] [-d <date options, similar to '-d' switch to date command>]
 EOF
 }
 
 link=""
 dirpath=""
 suff=""
-while getopts "l:o:s:h" OPTION; do
+date_opts="-d now"
+while getopts "l:o:s:d:h" OPTION; do
     case $OPTION in
         l)
             link="$OPTARG"
@@ -29,6 +30,9 @@ while getopts "l:o:s:h" OPTION; do
             ;;
         s)
             suff="$OPTARG"
+            ;;
+        d)
+            date_opts="-d $OPTARG"
             ;;
         h)
             usage
@@ -76,7 +80,7 @@ function add_torrent() {
 
 # download .torrent for shows aired today
 echo "Getting episode list..."
-curl -s $link | grep "<title>\|<dc:date>" | grep `date +%F` -B1 | grep  ">.* S[0-9]\+E[0-9]\+" -o | sed 's/>//g' | sed 's/\s*(.*)//g' | while read title
+curl -s $link | grep "<title>\|<dc:date>" | grep `date "$date_opts" +%F` -B1 | grep  ">.* S[0-9]\+E[0-9]\+" -o | sed 's/>//g' | sed 's/\s*(.*)//g' | while read title
 do
     add_torrent "$title" "$suff"
 done
