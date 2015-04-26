@@ -3,6 +3,7 @@
 mkdir -p /data/{transmission,watch,downloads}
 cp /opt/transmission.json /data/transmission/settings.json
 ln -s /data/downloads /srv/http/downloads
+test -n "$EMAIL" && echo Environment="EMAIL=$EMAIL" >> /etc/systemd/system/transmission.service.d/custom.conf
 
 list() { l=`echo $@ | sed 's/,/" "/g'`; echo "(\"$l\")"; }
 eval FEEDS=`list $RSS_FEED`
