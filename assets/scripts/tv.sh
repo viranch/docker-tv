@@ -53,6 +53,9 @@ function search() {
     feed "$@" | grep "<link>.*$" -o | tail -n +2 | sed 's/<link>http:\/\/torrentz\.in\///g' | sed 's/<\/link>//g'
 }
 
+function get_torrent() {
+    test `curl -s --compressed $1 -o $2 -D - | head -n1 | cut -d' ' -f2` -eq 200
+}
 
 function add_torrent() {
     title="$1"
@@ -62,7 +65,7 @@ function add_torrent() {
     status="failed"
     for hash in `search $query`; do
         fname="`echo $title | sed 's/ /./g'`.torrent"
-        wget -q http://torcache.net/torrent/$hash.torrent -O "$dirpath/$fname"
+        get_torrent http://torcache.net/torrent/$hash.torrent "$dirpath/$fname"
         if [[ $? == 0 ]]; then
             status="found"
             break
