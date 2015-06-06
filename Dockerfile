@@ -37,6 +37,9 @@ ADD assets/systemd/ /etc/systemd/system/
 RUN systemctl enable httpd transmission minidlna cronie; \
     chmod a+x /opt/scripts/*
 
+# Clean up
+RUN pacman --noprogressbar --noconfirm -Scc
+
 # Declare binds
 VOLUME [ "/data" ]
 EXPOSE 80
