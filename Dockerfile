@@ -24,7 +24,7 @@ RUN pacman --noprogressbar --noconfirm -S wget unzip \
  && mv htaccess.txt .htaccess \
  && mv theme/htaccess.txt theme/.htaccess \
  && sed -i '/explore.*header\.html.*footer\.html/d' theme/footer.html \
- && sed -i 's/NameWidth=\*/NameWidth=40/g' theme/.htaccess \
+ && sed -i 's/NameWidth=\*/NameWidth=40/g' .htaccess \
  && rm -r /tmp/apaxy.zip /tmp/Apaxy-master \
  && pacman --noprogressbar --noconfirm -Rs wget unzip
 
