@@ -14,6 +14,20 @@ RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -
 RUN pacman --noprogressbar --noconfirm -S openssl apache
 ADD assets/config/httpd/ /etc/httpd/conf/
 
+# theming [Source: http://adamwhitcroft.com/apaxy/]
+RUN pacman --noprogressbar --noconfirm -S wget unzip \
+ && wget https://github.com/AdamWhitcroft/Apaxy/archive/master.zip -O /tmp/apaxy.zip \
+ && unzip /tmp/apaxy.zip -d /tmp/ \
+ && cd /srv/http \
+ && mv /tmp/Apaxy-master/apaxy/* . \
+ && sed -i 's/{FOLDERNAME}\///g' htaccess.txt \
+ && mv htaccess.txt .htaccess \
+ && mv theme/htaccess.txt theme/.htaccess \
+ && sed -i '/explore.*header\.html.*footer\.html/d' theme/footer.html \
+ && sed -i 's/NameWidth=\*/NameWidth=40/g' theme/.htaccess \
+ && rm -r /tmp/apaxy.zip /tmp/Apaxy-master \
+ && pacman --noprogressbar --noconfirm -Rs wget unzip
+
 # transmission
 RUN pacman --noprogressbar --noconfirm -S dnsutils s-nail transmission-cli
 ADD assets/config/transmission.json /opt/
