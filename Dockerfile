@@ -29,7 +29,7 @@ RUN pacman --noprogressbar --noconfirm -S wget unzip \
  && pacman --noprogressbar --noconfirm -Rs wget unzip
 
 # transmission
-RUN pacman --noprogressbar --noconfirm -S dnsutils s-nail transmission-cli
+RUN pacman --noprogressbar --noconfirm -S dnsutils libidn s-nail transmission-cli
 ADD assets/config/transmission.json /opt/
 
 # minidlna
