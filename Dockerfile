@@ -40,7 +40,7 @@ ADD assets/config/minidlna.conf /etc/minidlna.conf
 ADD assets/search/ /srv/http/search/
 
 # dashboard page
-ADD assets/dashboard/ /srv/http/dashboard/
+ADD assets/dashboard/ /srv/http/
 
 # Install our stuff
 RUN pacman --noprogressbar --noconfirm -S cronie
