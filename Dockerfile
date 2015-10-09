@@ -36,9 +36,6 @@ ADD assets/config/transmission.json /opt/
 RUN pacman --noprogressbar --noconfirm -S minidlna
 ADD assets/config/minidlna.conf /etc/minidlna.conf
 
-# search page
-ADD assets/search/ /srv/http/search/
-
 # dashboard page
 ADD assets/dashboard/ /srv/http/
 

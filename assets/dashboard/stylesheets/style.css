@@ -1,0 +1,58 @@
+.has-below {
+    padding-bottom: 20px;
+}
+
+.has-below-small {
+    padding-bottom: 10px;
+}
+
+.has-below-tiny {
+    padding-bottom: 5px;
+}
+
+#search-status {
+  padding-left: 10px;
+}
+
+#search-btn > i {
+  line-height: inherit;
+}
+
+.btn-info {
+  color: #fff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+
+input.form-control.simple:focus {
+  border-color: #cccccc;
+  box-shadow: none;
+}
+
+/* scrollable modal */
+.modal-dialog{
+    overflow-y: initial !important
+}
+.modal-body{
+    height: 400px;
+    overflow-y: auto;
+}
+/* scrollable modal end */
+
+button.btn-sm {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+}
+
+#iframes-container {
+  height: 93%;
+}
+
+html, body, .expand {
+  height: 100%;
+}

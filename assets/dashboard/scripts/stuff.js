@@ -33,6 +33,9 @@ function search() {
                 });
             });
             setup_result_events();
+
+            $('#results .modal-title').html('Search results for "' + $('#search-q').val() + '"')
+            $('#results').modal('show');
         });
 }
 
@@ -67,9 +70,11 @@ function download() {
             .unbind('click')
             .removeClass("btn-default")
             .addClass("btn-info")
-            .prop('href', '/transmission')
             .html('<i class="icon icon-ok"></i>&nbsp;Added to download&nbsp;<i class="icon icon-chevron-right"></i>')
-            .prop('title', 'Visit download page')
+            .click(function() {
+                $('#results').modal('hide');
+                return false;
+            })
         ;
     });
     return false;

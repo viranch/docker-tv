@@ -3,9 +3,104 @@
 <head>
   <meta charset="utf-8">
   <title>Dashboard</title>
+
+  <!-- jquery -->
+  <script src="scripts/jquery-1.11.0.min.js"></script>
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="scripts/bootstrap.min.js"></script>
+
+  <!-- ko -->
+  <script src="scripts/knockout-min.js"></script>
+
+  <!-- timeago -->
+  <script src="scripts/jquery.timeago.js"></script>
+
+  <!-- gitlab css dump -->
+  <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
+
+  <!-- our style customizations -->
+  <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+  <!-- data model -->
+  <script src="scripts/stuff.js"></script>
 </head>
 <body>
-     <iframe src="/transmission/web/" frameborder="0" align="left" height="97%" style="width:49.5%;position:absolute;"></iframe>
-     <iframe src="/downloads/" frameborder="0" align="right" height="97%" style="width:49.5%;position:absolute;right:0;"></iframe>
+  <div class="container-fluid expand">
+    <!-- search box input -->
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="row">
+          <div class="has-below-tiny"></div>
+          <div class="input-group">
+            <input id="search-q" type="text" class="form-control simple input-sm" placeholder="Search for torrents">
+            <span class="input-group-btn">
+              <button id="search-btn" class="btn btn-info btn-sm" type="button">
+                <i class="icon icon-search search-btn"></i>
+              </button>
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <small><em id="search-status">&nbsp;</em></small>
+        </div>
+      </div>
+    </div>
+
+    <!-- iframes -->
+    <div class="row" id="iframes-container">
+      <div class="col-md-6 expand">
+        <iframe src="/transmission/web/" frameborder="0"></iframe>
+      </div>
+      <div class="col-md-6 expand">
+        <iframe src="/downloads/" frameborder="0"></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- search results modal -->
+  <div class="modal fade" id="results">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          <div class="row" data-bind="if: results().length > 0">
+            <ul class="well-list issues-list" data-bind="foreach: results">
+              <li class="issue">
+                <div class="issue-title">
+                  <span class="str-truncated">
+                    <a class="row_title" data-bind="attr: { href: link }, text: title"></a>
+                  </span>
+                </div>
+                <div class="issue-info">
+                  <span data-bind="text: info"></span>
+                  <div class="pull-right">
+                    <small>
+                      <time class="timeago" data-bind="attr: { datetime: date }"></time>
+                    </small>
+                  </div>
+                </div>
+                <div class="issue-actions">
+                  <a class="btn btn-small btn-default download-btn" data-bind="attr: { href: torrent_link }">
+                    <i class="icon icon-download-alt"></i>
+                    &nbsp;
+                    Download
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
