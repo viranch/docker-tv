@@ -1,4 +1,4 @@
-var ko_data = { results: ko.observableArray() };
+var ko_data = { query: ko.observable(''), results: ko.observableArray(), status_msg: ko.observable('&nbsp;') };
 var tr_token;
 
 function split_last(string, delim) {
@@ -7,7 +7,7 @@ function split_last(string, delim) {
 }
 
 function search() {
-    $('#search-status').html('Searching...');
+    ko_data.status_msg('Searching...');
 
     $.ajax("/tz/feed?q="+encodeURIComponent($('#search-q').val()))
         .done(function(data) {
@@ -15,11 +15,11 @@ function search() {
             ko_data.results.removeAll();
 
             if (items.length == 0) {
-                $('#search-status').html('<i class="icon icon-warning-sign"></i> No search results! Try searching something else..');
+                ko_data.status_msg('<i class="icon icon-warning-sign"></i> No search results! Try searching something else..');
                 return;
             }
 
-            $('#search-status').html('&nbsp;');
+            ko_data.status_msg('&nbsp;');
             // knock it out!
             items.each(function() {
                 var item = $(this);
@@ -33,7 +33,7 @@ function search() {
             });
             setup_result_events();
 
-            $('#results .modal-title').html('Search results for "' + $('#search-q').val() + '"')
+            ko_data.query($('#search-q').val());
             $('#results').modal('show');
         });
 
