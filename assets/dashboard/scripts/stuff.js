@@ -1,5 +1,4 @@
 var ko_data = { results: ko.observableArray() };
-var ko_elem;
 var tr_token;
 
 function split_last(string, delim) {
