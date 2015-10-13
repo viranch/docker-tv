@@ -71,6 +71,7 @@
           <h4 class="modal-title">Search results for "<span data-bind="text: query"></span>"</h4>
         </div>
         <div class="modal-body">
+          <!-- results knockout start -->
           <div class="row" data-bind="if: results().length > 0">
             <ul class="well-list issues-list" data-bind="foreach: results">
               <li class="issue">
@@ -97,6 +98,7 @@
               </li>
             </ul>
           </div>
+          <!-- results knockout end -->
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
