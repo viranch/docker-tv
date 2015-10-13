@@ -1,5 +1,6 @@
 var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg: ko.observable('&nbsp;') };
 var tr_token;
+var search_cache = {};
 
 function split_last(string, delim) {
     var tokens = string.split(delim);
@@ -17,34 +18,46 @@ function map_array(array, func) {
 function search() {
     ko_data.status_msg('Searching...');
 
-    $.ajax("/tz/feed?q="+encodeURIComponent($('#search-q').val()))
-        .done(function(data) {
-            var items = $(data).find("item");
+    var query = $('#search-q').val();
 
-            if (items.length == 0) {
-                ko_data.status_msg('<i class="icon icon-warning-sign"></i> No search results! Try searching something else..');
-                return;
-            }
+    if (search_cache[query]) {
+        show_results(query, search_cache[query]);
+    } else {
+        $.ajax("/tz/feed?q="+encodeURIComponent(query))
+            .done(function(data) {
+                var items = $(data).find("item");
 
-            ko_data.status_msg('&nbsp;');
-            // knock it out!
-            results = map_array(items, function(item) {
-                return {
-                    title: item.find("title").text(),
-                    link: item.find("link").text(),
-                    torrent_link: "http://torcache.net/torrent/"+split_last(item.find("link").text(), "/").toUpperCase()+".torrent",
-                    date: (new Date(item.find("pubDate").text())).toISOString(),
-                    info: item.find("description").text().replace(/ Hash: .*$/g, ''),
-                };
+                results = map_array(items, function(item) {
+                    return {
+                        title: item.find("title").text(),
+                        link: item.find("link").text(),
+                        torrent_link: "http://torcache.net/torrent/"+split_last(item.find("link").text(), "/").toUpperCase()+".torrent",
+                        date: (new Date(item.find("pubDate").text())).toISOString(),
+                        info: item.find("description").text().replace(/ Hash: .*$/g, ''),
+                    };
+                });
+                search_cache[query] = results;
+
+                show_results(query, results);
             });
-            ko_data.results(results);
-            setup_result_events();
-
-            ko_data.query($('#search-q').val());
-            $('#results').modal('show');
-        });
+    }
 
     return false;
+}
+
+function show_results(query, results) {
+    if (results.length == 0) {
+        ko_data.status_msg('<i class="icon icon-warning-sign"></i> No search results! Try searching something else..');
+        return;
+    }
+
+    ko_data.status_msg('&nbsp;');
+    // knock it out!
+    ko_data.results(results);
+    setup_result_events();
+
+    ko_data.query(query);
+    $('#results').modal('show');
 }
 
 function tr_ajaxError(request, error_string, exception, ajaxObject) {
