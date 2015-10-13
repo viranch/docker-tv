@@ -1,9 +1,17 @@
-var ko_data = { query: ko.observable(''), results: ko.observableArray(), status_msg: ko.observable('&nbsp;') };
+var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg: ko.observable('&nbsp;') };
 var tr_token;
 
 function split_last(string, delim) {
     var tokens = string.split(delim);
     return tokens[tokens.length-1];
+}
+
+function map_array(array, func) {
+    var result = [];
+    array.each(function() {
+        result.push(func($(this)));
+    });
+    return result;
 }
 
 function search() {
@@ -12,7 +20,6 @@ function search() {
     $.ajax("/tz/feed?q="+encodeURIComponent($('#search-q').val()))
         .done(function(data) {
             var items = $(data).find("item");
-            ko_data.results.removeAll();
 
             if (items.length == 0) {
                 ko_data.status_msg('<i class="icon icon-warning-sign"></i> No search results! Try searching something else..');
@@ -21,16 +28,16 @@ function search() {
 
             ko_data.status_msg('&nbsp;');
             // knock it out!
-            items.each(function() {
-                var item = $(this);
-                ko_data.results.push({
+            results = map_array(items, function(item) {
+                return {
                     title: item.find("title").text(),
                     link: item.find("link").text(),
                     torrent_link: "http://torcache.net/torrent/"+split_last(item.find("link").text(), "/").toUpperCase()+".torrent",
                     date: (new Date(item.find("pubDate").text())).toISOString(),
                     info: item.find("description").text().replace(/ Hash: .*$/g, ''),
-                });
+                };
             });
+            ko_data.results(results);
             setup_result_events();
 
             ko_data.query($('#search-q').val());
