@@ -37,6 +37,8 @@ function search() {
             $('#results .modal-title').html('Search results for "' + $('#search-q').val() + '"')
             $('#results').modal('show');
         });
+
+    return false;
 }
 
 function tr_ajaxError(request, error_string, exception, ajaxObject) {
@@ -81,8 +83,7 @@ function download() {
 }
 
 $(document).ready(function() {
-    $('#search-btn').click(search);
-    $('#search-q').keyup(function(e){ if(e.keyCode==13) $('#search-btn').click(); });
+    $('#search-form').submit(search);
     $('#search-q').focus();
     ko.applyBindings(ko_data);
 });

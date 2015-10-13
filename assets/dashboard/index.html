@@ -32,14 +32,16 @@
       <div class="col-md-8 col-md-offset-2">
         <div class="row">
           <div class="has-below-tiny"></div>
-          <div class="input-group">
-            <input id="search-q" type="text" class="form-control simple input-sm" placeholder="Search for torrents">
-            <span class="input-group-btn">
-              <button id="search-btn" class="btn btn-info btn-sm" type="button">
-                <i class="icon icon-search search-btn"></i>
-              </button>
-            </span>
-          </div>
+          <form id="search-form">
+            <div class="input-group">
+              <input id="search-q" type="text" class="form-control simple input-sm" placeholder="Search for torrents">
+              <span class="input-group-btn">
+                <button id="search-btn" class="btn btn-info btn-sm" type="submit">
+                  <i class="icon icon-search search-btn"></i>
+                </button>
+              </span>
+            </div>
+          </form>
         </div>
         <div class="row">
           <small><em id="search-status">&nbsp;</em></small>
