@@ -1,7 +1,7 @@
 FROM debian:jessie
 
 ENV APAXY_URL https://github.com/AdamWhitcroft/Apaxy/archive/master.tar.gz
-ENV FOREGO_URL https://godist.herokuapp.com/projects/ddollar/forego/releases/current/linux-amd64/forego
+ENV FOREGO_URL https://github.com/viranch/forego/releases/download/0.16.2/forego
 
 RUN apt-get update; \
     apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon heirloom-mailx dnsutils cron minidlna curl; \
