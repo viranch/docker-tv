@@ -19,6 +19,12 @@ docker run -d --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.c
 ```
 docker run -d --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data -p 80:80 viranch/tv
 ```
+- Navigate to `http://your-ip/`. You can change the port with the `-p` switch, eg: `-p 8000:80`.
+
+- You can also optionally set a basic authentication username & password using the `-e AUTH_USER` & `-e AUTH_PASS` environment variables:
+```
+docker run [...] -e AUTH_USER=bob -e AUTH_PASS=myprecious [...] viranch/tv
+```
 
 ### What does it contain?
 
