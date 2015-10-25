@@ -23,8 +23,10 @@ docker run -d --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.c
 ### What does it contain?
 
 - [Transmission](http://www.transmissionbt.com/) server for downloading media from torrents.
-- A torrent search page, with direct "Download" button (`http://your-ip/search`).
-- Apache web server hosting downloads directory and transmission interface (`http://your-ip/downloads`, `http://your-ip/transmission`).
+- Dashboard web page (`http://your-ip/`) that shows:
+  - Torrent search bar, with direct "Download" button in search results.
+  - The Transmission web interface
+  - Web view of the downloads directory (hosted by Apache).
 - A daily cron job that looks for new episodes from the RSS link provided in run command.
 - [MiniDLNA](http://sourceforge.net/projects/minidlna/) media streaming server, which streams the download directory; so anything downloaded with torrents is readily available for streaming to a TV or any UPnP/DLNA client (eg, VLC Media Player).
 
