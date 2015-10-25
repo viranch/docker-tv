@@ -1,0 +1,4 @@
+transmission: /usr/bin/transmission-daemon -f --config-dir /data/transmission
+web: /usr/sbin/apache2ctl -DFOREGROUND
+minidlna: /usr/bin/minidlnad -f /etc/minidlna.conf -P /run/minidlna/minidlna.pid; while true; do sleep 99999; done
+cron: /usr/sbin/cron -f
