@@ -1,59 +1,35 @@
-FROM base/archlinux
+FROM debian:jessie
 
-# Base pacman setup
-RUN pacman --noprogressbar --noconfirm -Syy archlinux-keyring
+ENV APAXY_URL https://github.com/AdamWhitcroft/Apaxy/archive/master.tar.gz
+ENV FOREGO_URL https://godist.herokuapp.com/projects/ddollar/forego/releases/current/linux-amd64/forego
 
-# Source: https://rhatdan.wordpress.com/2014/04/30/running-systemd-within-a-docker-container/
-ENV container docker
-RUN rm -f `find /lib/systemd/system/sysinit.target.wants -maxdepth 1 -type l ! -regex ".*/systemd-tmpfiles-setup.service"` \
-        /etc/systemd/system/*.wants/* \
-        /lib/systemd/system/{multi-user,local-fs,basic}.target.wants/* \
-        /lib/systemd/system/sockets.target.wants/*{udev,initctl}*
+RUN apt-get update; \
+    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon heirloom-mailx dnsutils cron minidlna curl; \
+    curl -kL "$APAXY_URL" | tar -C /tmp/ -zx && mv /tmp/Apaxy-master/apaxy/* /var/www/html/ && rm -rf /tmp/Apaxy-master; \
+    curl -kL "$FOREGO_URL" -o /usr/local/bin/forego && chmod a+x /usr/local/bin/forego; \
+    apt-get purge -y curl && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
-# httpd
-RUN pacman --noprogressbar --noconfirm -S openssl apache
-ADD assets/config/httpd/ /etc/httpd/conf/
+RUN cd /var/www/html; \
+    sed -i 's/{FOLDERNAME}\///g' htaccess.txt; \
+    mv htaccess.txt .htaccess; \
+    mv theme/htaccess.txt theme/.htaccess; \
+    sed -i '/explore.*header\.html.*footer\.html/d' theme/footer.html; \
+    sed -i 's/NameWidth=\*/NameWidth=40/g' .htaccess
 
-# theming [Source: http://adamwhitcroft.com/apaxy/]
-RUN pacman --noprogressbar --noconfirm -S wget unzip \
- && wget https://github.com/AdamWhitcroft/Apaxy/archive/master.zip -O /tmp/apaxy.zip \
- && unzip /tmp/apaxy.zip -d /tmp/ \
- && cd /srv/http \
- && mv /tmp/Apaxy-master/apaxy/* . \
- && sed -i 's/{FOLDERNAME}\///g' htaccess.txt \
- && mv htaccess.txt .htaccess \
- && mv theme/htaccess.txt theme/.htaccess \
- && sed -i '/explore.*header\.html.*footer\.html/d' theme/footer.html \
- && sed -i 's/NameWidth=\*/NameWidth=40/g' .htaccess \
- && rm -r /tmp/apaxy.zip /tmp/Apaxy-master \
- && pacman --noprogressbar --noconfirm -Rs wget unzip
+RUN for mod in proxy proxy_ajp proxy_balancer proxy_connect proxy_ftp proxy_html proxy_http proxy_scgi ssl xml2enc; do a2enmod $mod; done
+ADD assets/config/apache2 /etc/apache2/conf-enabled/
+ADD assets/dashboard/ /var/www/html/
 
-# transmission
-RUN pacman --noprogressbar --noconfirm -S dnsutils libidn s-nail transmission-cli
 ADD assets/config/transmission.json /opt/
 
-# minidlna
-RUN pacman --noprogressbar --noconfirm -S minidlna
 ADD assets/config/minidlna.conf /etc/minidlna.conf
 
-# dashboard page
-ADD assets/dashboard/ /srv/http/
-
-# Install our stuff
-RUN pacman --noprogressbar --noconfirm -S cronie
 ADD assets/scripts/ /opt/scripts/
-ADD assets/systemd/ /etc/systemd/system/
 
-# Setup
-RUN systemctl enable httpd transmission minidlna cronie; \
-    chmod a+x /opt/scripts/*
+ADD assets/config/forego/ /opt/forego/
 
-# Clean up
-RUN pacman --noprogressbar --noconfirm -Scc
-
-# Declare binds
-VOLUME [ "/data" ]
+VOLUME /data
 EXPOSE 80
 
-# Run command
-CMD ["/opt/scripts/start.sh"]
+ENTRYPOINT ["/opt/scripts/start.sh"]
+CMD ["forego", "start", "-f", "/opt/forego/Procfile", "-e", "/opt/forego/env", "-r"]
