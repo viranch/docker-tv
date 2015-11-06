@@ -40,6 +40,7 @@ while getopts "l:o:s:d:h" OPTION; do
             ;;
         h)
             usage
+            exit 0
             ;;
     esac
 done
