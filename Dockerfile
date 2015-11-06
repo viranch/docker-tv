@@ -4,12 +4,14 @@ FROM debian:jessie
 ENV APAXY_URL https://github.com/AdamWhitcroft/Apaxy/archive/master.tar.gz
 ENV FOREGO_URL https://github.com/viranch/forego/releases/download/0.16.2/forego
 
-# Download & install everything we need
+# Download & install all required packages
 RUN apt-get update; \
-    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon heirloom-mailx dnsutils cron minidlna curl; \
-    curl -kL "$APAXY_URL" | tar -C /tmp/ -zx && mv /tmp/Apaxy-master/apaxy/* /var/www/html/ && rm -rf /tmp/Apaxy-master; \
-    curl -kL "$FOREGO_URL" -o /usr/local/bin/forego && chmod a+x /usr/local/bin/forego; \
-    apt-get purge -y curl && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon curl heirloom-mailx dnsutils cron minidlna; \
+    rm -rf /var/lib/apt/lists/*
+
+# Download apaxy & forego
+RUN curl -kL "$APAXY_URL" | tar -C /tmp/ -zx && mv /tmp/Apaxy-master/apaxy/* /var/www/html/ && rm -rf /tmp/Apaxy-master; \
+    curl -kL "$FOREGO_URL" -o /usr/local/bin/forego && chmod a+x /usr/local/bin/forego
 
 # Setup apache
 RUN for mod in proxy proxy_ajp proxy_balancer proxy_connect proxy_ftp proxy_html proxy_http proxy_scgi ssl xml2enc; do a2enmod $mod; done
