@@ -12,7 +12,7 @@
 
 usage() {
     cat << EOF
-Usage: $0 -l <link-to-rss-feed> -o <output-directory> [-s <search-suffix>] [-d <date options, similar to '-d' switch to date command>]
+Usage: $0 -l <link-to-rss-feed> -o <output-directory> [-s <search-suffix>] [-d <date options, similar to '-d' switch to date command>] [-p use proxy for HTTP requests. Default: off]
 EOF
 }
 
@@ -20,6 +20,7 @@ link=""
 dirpath=""
 suff=""
 date_opts="-d now"
+use_proxy=0
 while getopts "l:o:s:d:h" OPTION; do
     case $OPTION in
         l)
@@ -33,6 +34,9 @@ while getopts "l:o:s:d:h" OPTION; do
             ;;
         d)
             date_opts="-d $OPTARG"
+            ;;
+        p)
+            use_proxy=1
             ;;
         h)
             usage
@@ -51,11 +55,14 @@ function urlread() {
 }
 
 function feed() {
-    urlread -s https://torrentz.in/feed?q="$@"
-    #cookie_file="/tmp/surecook"
-    #rm -f $cookie_file
-    #while [[ ! -f $cookie_file ]]; do urlread -s -XHEAD https://www.suresome.com/ -c $cookie_file > /dev/null; done
-    #urlread -s --compressed https://www.suresome.com/proxy/nph-secure/00A/https/torrentz.in/feed%3fq%3d"$@" -b $cookie_file
+    if [[ $use_proxy -eq 1 ]]; then
+        cookie_file="/tmp/surecook"
+        rm -f $cookie_file
+        while [[ ! -f $cookie_file ]]; do urlread -s -XHEAD https://www.suresome.com/ -c $cookie_file > /dev/null; done
+        urlread -s --compressed https://www.suresome.com/proxy/nph-secure/00A/https/torrentz.in/feed%3fq%3d"$@" -b $cookie_file
+    else
+        urlread -s https://torrentz.in/feed?q="$@"
+    fi
 }
 
 function search() {
