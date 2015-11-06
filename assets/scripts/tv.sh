@@ -45,12 +45,17 @@ match=$(echo $link | grep -o "^http://followshows\.com/feed/[^/]\+$")
 test -z "$match" && echo "Invalid URL. Please visit followshows.com to generate your personalised URL" && exit 1
 test -d "$dirpath" || mkdir -p "$dirpath" 2>/dev/null || (echo "Invalid download path: $dirpath" && exit 2)
 
+# wrapper around curl to spoof user agent and disable SSL verification
+function urlread() {
+    curl -k -H "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2490.80 Safari/537.36" $*
+}
+
 function feed() {
-    curl -s https://torrentz.in/feed?q="$@"
+    urlread -s https://torrentz.in/feed?q="$@"
     #cookie_file="/tmp/surecook"
     #rm -f $cookie_file
-    #while [[ ! -f $cookie_file ]]; do curl -s -XHEAD https://www.suresome.com/ -c $cookie_file > /dev/null; done
-    #curl -s --compressed https://www.suresome.com/proxy/nph-secure/00A/https/torrentz.in/feed%3fq%3d"$@" -b $cookie_file
+    #while [[ ! -f $cookie_file ]]; do urlread -s -XHEAD https://www.suresome.com/ -c $cookie_file > /dev/null; done
+    #urlread -s --compressed https://www.suresome.com/proxy/nph-secure/00A/https/torrentz.in/feed%3fq%3d"$@" -b $cookie_file
 }
 
 function search() {
@@ -58,7 +63,7 @@ function search() {
 }
 
 function get_torrent() {
-    test `curl -s --compressed $1 -o $2 -D - | head -n1 | cut -d' ' -f2` -eq 200
+    test `(urlread -s --compressed $1 -o $2 -D - ; echo 1) | head -n1 | cut -d' ' -f2` -eq 200
 }
 
 function add_torrent() {
@@ -80,7 +85,7 @@ function add_torrent() {
 
 # download .torrent for shows aired today
 echo "Getting episode list..."
-curl -s $link | grep "<title>\|<dc:date>" | grep `date "$date_opts" +%F` -B1 | grep  ">.* S[0-9]\+E[0-9]\+" -o | sed 's/>//g' | sed 's/\s*(.*)//g' | while read title
+urlread -s $link | grep "<title>\|<dc:date>" | grep `date "$date_opts" +%F` -B1 | grep  ">.* S[0-9]\+E[0-9]\+" -o | sed 's/>//g' | sed 's/\s*(.*)//g' | while read title
 do
     add_torrent "$title" "$suff"
 done
