@@ -14,7 +14,7 @@ ENV FOREGO_URL https://github.com/viranch/forego/releases/download/0.16.2/forego
 RUN curl -kL "$FOREGO_URL" -o /usr/local/bin/forego && chmod a+x /usr/local/bin/forego
 
 # Setup apache
-RUN for mod in proxy proxy_ajp proxy_balancer proxy_connect proxy_ftp proxy_html proxy_http proxy_scgi ssl xml2enc; do a2enmod $mod; done
+RUN for mod in headers proxy proxy_ajp proxy_balancer proxy_connect proxy_ftp proxy_html proxy_http proxy_scgi ssl xml2enc; do a2enmod $mod; done
 ADD assets/config/apache2 /etc/apache2/conf-enabled/
 ADD assets/dashboard/ /var/www/html/
 RUN cd /var/www/html; \
