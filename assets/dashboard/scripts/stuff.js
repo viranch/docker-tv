@@ -31,7 +31,7 @@ function search() {
                     return {
                         title: item.find("title").text(),
                         link: item.find("link").text(),
-                        torrent_link: "http://torcache.net/torrent/"+split_last(item.find("link").text(), "/").toUpperCase()+".torrent",
+                        torrent_link: "https://torcache.net/torrent/"+split_last(item.find("link").text(), "/").toUpperCase()+".torrent",
                         date: (new Date(item.find("pubDate").text())).toISOString(),
                         info: item.find("description").text().replace(/ Hash: .*$/g, ''),
                     };
