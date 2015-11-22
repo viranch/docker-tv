@@ -11,20 +11,20 @@ RUN curl -kL "$FOREGO_URL" -o /usr/local/bin/forego && chmod a+x /usr/local/bin/
 
 # Setup apache
 RUN for mod in headers proxy proxy_ajp proxy_balancer proxy_connect proxy_ftp proxy_html proxy_http proxy_scgi ssl xml2enc; do a2enmod $mod; done
-ADD assets/config/apache2 /etc/apache2/conf-enabled/
-ADD assets/dashboard/ assets/apaxy/ /var/www/html/
+COPY assets/config/apache2 /etc/apache2/conf-enabled/
+COPY assets/dashboard/ assets/apaxy/ /var/www/html/
 
 # Setup transmission
-ADD assets/config/transmission.json /opt/
+COPY assets/config/transmission.json /opt/
 
 # Setup minidlna
-ADD assets/config/minidlna.conf /etc/minidlna.conf
+COPY assets/config/minidlna.conf /etc/minidlna.conf
 
 # Add required scripts
-ADD assets/scripts/ /opt/scripts/
+COPY assets/scripts/ /opt/scripts/
 
 # Setup forego, our process supervisor
-ADD assets/config/forego/ /opt/forego/
+COPY assets/config/forego/ /opt/forego/
 
 # Finally declare public things
 VOLUME /data
