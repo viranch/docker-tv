@@ -86,17 +86,28 @@ function download() {
     var anchor = $(this);
     var url = anchor.prop('href');
     var o = { method: 'torrent-add', arguments: { filename: url } }
-    tr_request(o, function() {
-        anchor
-            .unbind('click')
-            .removeClass("btn-default")
-            .addClass("btn-info")
-            .html('<i class="icon icon-ok"></i>&nbsp;Added to download&nbsp;<i class="icon icon-chevron-right"></i>')
-            .click(function() {
-                $('#results').modal('hide');
-                return false;
-            })
-        ;
+    tr_request(o, function(data) {
+        if (data.result == "success") {
+            anchor
+                .unbind('click')
+                .removeClass("btn-default")
+                .addClass("btn-info")
+                .html('<i class="icon icon-ok"></i>&nbsp;Added to download&nbsp;<i class="icon icon-chevron-right"></i>')
+                .click(function() {
+                    $('#results').modal('hide');
+                    return false;
+                })
+            ;
+        } else {
+            var toks = data.result.split(":");
+            toks.shift();
+            var error = toks.join(":");
+            anchor
+                .removeClass("btn-default")
+                .addClass("btn-danger")
+                .html('<i class="icon icon-exclamation-sign"></i>&nbsp;' + error)
+            ;
+        }
     });
     return false;
 }
