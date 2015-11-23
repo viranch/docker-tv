@@ -87,6 +87,7 @@ function download() {
     var url = anchor.prop('href');
     var o = { method: 'torrent-add', arguments: { filename: url } }
     tr_request(o, function(data) {
+        anchor.button('reset');
         if (data.result == "success") {
             anchor
                 .unbind('click')
@@ -109,6 +110,7 @@ function download() {
             ;
         }
     });
+    anchor.button('loading');
     return false;
 }
 
