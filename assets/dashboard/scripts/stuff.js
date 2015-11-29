@@ -15,6 +15,17 @@ function map_array(array, func) {
     return result;
 }
 
+function get_uri_param(param) {
+    var query = window.location.search.substring(1).split('&');
+    for (i in query) {
+        var kv = query[i].split('=');
+        if (kv[0] == param) {
+            return decodeURIComponent(kv[1]);
+        }
+    }
+    return null;
+}
+
 function search() {
     ko_data.status_msg('Searching...');
 
@@ -115,6 +126,14 @@ function download() {
     return false;
 }
 
+function trigger_uri_search() {
+    var query = get_uri_param('q');
+    if (!query) return;
+
+    $('#search-q').val(query);
+    $('#search-btn').click();
+}
+
 $(document).ready(function() {
     $('#search-form').submit(search);
     $('#results').on('hidden.bs.modal', function() {
@@ -123,6 +142,8 @@ $(document).ready(function() {
 
     $('#search-q').focus();
     ko.applyBindings(ko_data);
+
+    trigger_uri_search();
 });
 
 function setup_result_events() {
