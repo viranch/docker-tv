@@ -1,3 +1,7 @@
+.row {
+    margin-right: 0px; /* To remove the extra space on the right which causes a vertical scrollbar to show up */
+}
+
 .has-below {
     padding-bottom: 20px;
 }
