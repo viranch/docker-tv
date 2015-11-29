@@ -46,6 +46,7 @@ function search() {
 }
 
 function show_results(query, results) {
+    $('#search-q').select();
     if (results.length == 0) {
         ko_data.status_msg('<i class="icon icon-warning-sign"></i> No search results! Try searching something else..');
         return;
@@ -116,6 +117,10 @@ function download() {
 
 $(document).ready(function() {
     $('#search-form').submit(search);
+    $('#results').on('hidden.bs.modal', function() {
+        $('#search-q').focus();
+    });
+
     $('#search-q').focus();
     ko.applyBindings(ko_data);
 });
