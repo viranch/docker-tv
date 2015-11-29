@@ -53,10 +53,10 @@ function show_results(query, results) {
 
     ko_data.status_msg('&nbsp;');
     // knock it out!
+    ko_data.query(query);
     ko_data.results(results);
     setup_result_events();
 
-    ko_data.query(query);
     $('#results').modal('show');
 }
 
