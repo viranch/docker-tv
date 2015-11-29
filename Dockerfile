@@ -6,8 +6,8 @@ RUN apt-get update; \
     rm -rf /var/lib/apt/lists/*
 
 # Install forego
-ENV FOREGO_URL https://github.com/viranch/forego/releases/download/0.16.2/forego
-RUN curl -kL "$FOREGO_URL" -o /usr/local/bin/forego && chmod a+x /usr/local/bin/forego
+RUN FOREGO_URL="https://github.com/viranch/forego/releases/download/0.16.2/forego"; \
+    curl -kL "$FOREGO_URL" -o /usr/local/bin/forego && chmod a+x /usr/local/bin/forego
 
 # Setup apache
 RUN for mod in headers proxy proxy_ajp proxy_balancer proxy_connect proxy_ftp proxy_html proxy_http proxy_scgi ssl xml2enc; do a2enmod $mod; done
