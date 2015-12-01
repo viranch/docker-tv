@@ -96,6 +96,12 @@ function tr_request(data, callback) {
 
 function download() {
     var anchor = $(this);
+
+    // ui feedback
+    anchor.parent().css('display', 'inherit');
+    anchor.button('loading');
+
+    // backend rolling
     var url = anchor.prop('href');
     var o = { method: 'torrent-add', arguments: { filename: url } }
     tr_request(o, function(data) {
@@ -122,7 +128,7 @@ function download() {
             ;
         }
     });
-    anchor.button('loading');
+
     return false;
 }
 
