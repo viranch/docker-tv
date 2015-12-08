@@ -118,9 +118,12 @@ function download() {
                 })
             ;
         } else {
-            var toks = data.result.split(":");
-            toks.shift();
-            var error = toks.join(":");
+            var error = data.result;
+            if (error.indexOf(":") > -1) {
+                toks = error.split(":");
+                toks.shift();
+                error = toks.join(":");
+            }
             anchor
                 .removeClass("btn-default")
                 .addClass("btn-danger")
