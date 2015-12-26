@@ -1,6 +1,17 @@
 # docker-tv
 Entertainment automation for home (RaspberryPi) and VPS in a docker image
 
+### How does it look like?
+
+##### Search for torrents
+![Search for torrents](https://raw.githubusercontent.com/viranch/docker-tv/master/screenshots/ss1.png)
+##### Select from search results
+![Select from search results](https://raw.githubusercontent.com/viranch/docker-tv/master/screenshots/ss2.png)
+##### Torrent downloads
+![Torrent downloads](https://raw.githubusercontent.com/viranch/docker-tv/master/screenshots/ss3.png)
+##### Push notification of download complete
+![Push notification of download complete](https://raw.githubusercontent.com/viranch/docker-tv/master/screenshots/ss4.jpg)
+
 ### How to use?
 
 - Get a VPS or a [RaspberryPi](http://www.raspberrypi.org/) and install any Linux OS (preferably, with a good docker support; choose one of Ubuntu & ArchLinux if in doubt).
