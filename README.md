@@ -1,3 +1,5 @@
+[![](https://badge.imagelayers.io/viranch/tv:latest.svg)](https://imagelayers.io/?images=viranch/tv:latest 'Get your own badge on imagelayers.io')
+
 # docker-tv
 Entertainment automation for home (RaspberryPi) and VPS in a docker image
 
