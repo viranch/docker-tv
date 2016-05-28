@@ -39,10 +39,12 @@ function search() {
                 var items = $(data).find("item");
 
                 results = map_array(items, function(item) {
+                    var hash = split_last(item.find("link").text(), "/");
                     return {
                         title: item.find("title").text(),
                         link: item.find("link").text(),
-                        torrent_link: "https://torcache.net/torrent/"+split_last(item.find("link").text(), "/").toUpperCase()+".torrent",
+                        torrent_link: "https://torcache.net/torrent/"+hash.toUpperCase()+".torrent",
+                        magnet_link: "magnet:?xt=urn:btih:"+hash,
                         date: (new Date(item.find("pubDate").text())).toISOString(),
                         info: item.find("description").text().replace(/ Hash: .*$/g, ''),
                     };
@@ -103,6 +105,17 @@ function download() {
 
     // backend rolling
     var url = anchor.attr('href');
+    add_download(url, anchor, {
+        error: function() {
+            var magnet = anchor.attr('data-magnet');
+            add_download(magnet, anchor);
+        }
+    });
+
+    return false;
+}
+
+function add_download(url, anchor, opts) {
     var o = { method: 'torrent-add', arguments: { filename: url } }
     tr_request(o, function(data) {
         anchor.button('reset');
@@ -118,6 +131,10 @@ function download() {
                 })
             ;
         } else {
+            if (typeof(opts) != 'undefined' && typeof(opts.error) == 'function') {
+                opts.error();
+                return false;
+            }
             var error = data.result;
             if (error.indexOf(":") > -1) {
                 toks = error.split(":");
@@ -131,8 +148,6 @@ function download() {
             ;
         }
     });
-
-    return false;
 }
 
 function trigger_uri_search() {
