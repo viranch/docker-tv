@@ -102,7 +102,7 @@ function download() {
     anchor.button('loading');
 
     // backend rolling
-    var url = anchor.prop('href');
+    var url = anchor.attr('href');
     var o = { method: 'torrent-add', arguments: { filename: url } }
     tr_request(o, function(data) {
         anchor.button('reset');
@@ -157,7 +157,7 @@ $(document).ready(function() {
 
 function setup_result_events() {
     // target=_blank
-    $('a').prop('target','_blank');
+    $('a').attr('target','_blank');
 
     // download
     $('.download-btn').click(download);
