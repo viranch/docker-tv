@@ -2,12 +2,12 @@ var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg
 var tr_token;
 var search_cache = {};
 
-function split_last(string, delim) {
+function splitLast(string, delim) {
     var tokens = string.split(delim);
     return tokens[tokens.length-1];
 }
 
-function map_array(array, func) {
+function mapArray(array, func) {
     var result = [];
     array.each(function() {
         result.push(func($(this)));
@@ -15,7 +15,7 @@ function map_array(array, func) {
     return result;
 }
 
-function get_uri_param(param) {
+function getUriParam(param) {
     var query = window.location.search.substring(1).split('&');
     for (i in query) {
         var kv = query[i].split('=');
@@ -32,14 +32,14 @@ function search() {
     var query = $('#search-q').val();
 
     if (search_cache[query]) {
-        show_results(query, search_cache[query]);
+        showResults(query, search_cache[query]);
     } else {
         $.ajax("/tz/feed?q="+encodeURIComponent(query))
             .done(function(data) {
                 var items = $(data).find("item");
 
-                results = map_array(items, function(item) {
-                    var hash = split_last(item.find("link").text(), "/");
+                results = mapArray(items, function(item) {
+                    var hash = splitLast(item.find("link").text(), "/");
                     return {
                         title: item.find("title").text(),
                         link: item.find("link").text(),
@@ -51,14 +51,14 @@ function search() {
                 });
                 search_cache[query] = results;
 
-                show_results(query, results);
+                showResults(query, results);
             });
     }
 
     return false;
 }
 
-function show_results(query, results) {
+function showResults(query, results) {
     $('#search-q').select();
     if (results.length == 0) {
         ko_data.status_msg('<i class="icon icon-warning-sign"></i> No search results! Try searching something else..');
@@ -69,7 +69,7 @@ function show_results(query, results) {
     // knock it out!
     ko_data.query(query);
     ko_data.results(results);
-    setup_result_events();
+    setupResultEvents();
 
     $('#results').modal('show');
 }
@@ -105,17 +105,17 @@ function download() {
 
     // backend rolling
     var url = anchor.attr('href');
-    add_download(url, anchor, {
+    addDownload(url, anchor, {
         error: function() {
             var magnet = anchor.attr('data-magnet');
-            add_download(magnet, anchor);
+            addDownload(magnet, anchor);
         }
     });
 
     return false;
 }
 
-function add_download(url, anchor, opts) {
+function addDownload(url, anchor, opts) {
     var o = { method: 'torrent-add', arguments: { filename: url } }
     tr_request(o, function(data) {
         anchor.button('reset');
@@ -150,8 +150,8 @@ function add_download(url, anchor, opts) {
     });
 }
 
-function trigger_uri_search() {
-    var query = get_uri_param('q');
+function triggerUriSearch() {
+    var query = getUriParam('q');
     if (!query) return;
 
     $('#search-q').val(query);
@@ -167,10 +167,10 @@ $(document).ready(function() {
     $('#search-q').focus();
     ko.applyBindings(ko_data);
 
-    trigger_uri_search();
+    triggerUriSearch();
 });
 
-function setup_result_events() {
+function setupResultEvents() {
     // target=_blank
     $('a').attr('target','_blank');
 
