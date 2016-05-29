@@ -74,26 +74,8 @@ function showResults(query, results) {
     $('#results').modal('show');
 }
 
-function tr_ajaxError(request, error_string, exception, ajaxObject) {
-    if (request.status === 409 && (tr_token = request.getResponseHeader('X-Transmission-Session-Id'))) {
-        $.ajax(ajaxObject);
-    }
-}
-
-function tr_request(data, callback) {
-    ajaxSettings = {
-        url: '/transmission/rpc',
-        type: 'POST',
-        contentType: 'json',
-        dataType: 'json',
-        cache: false,
-        data: JSON.stringify(data),
-        beforeSend: function(XHR){ if (tr_token) { XHR.setRequestHeader('X-Transmission-Session-Id', tr_token); } },
-        error: function(request, error_string, exception){ tr_ajaxError(request, error_string, exception, ajaxSettings); },
-        success: callback,
-    };
-
-    $.ajax(ajaxSettings);
+function transmission() {
+    return $('#tr-frame')[0].contentWindow.transmission;
 }
 
 function download() {
@@ -116,8 +98,9 @@ function download() {
 }
 
 function addDownload(url, anchor, opts) {
-    var o = { method: 'torrent-add', arguments: { filename: url } }
-    tr_request(o, function(data) {
+    var paused = !transmission().shouldAddedTorrentsStart();
+    var o = { method: 'torrent-add', arguments: { filename: url, paused: paused } }
+    transmission().remote.sendRequest(o, function(data) {
         anchor.button('reset');
         if (data.result == "success") {
             anchor
@@ -130,6 +113,7 @@ function addDownload(url, anchor, opts) {
                     return false;
                 })
             ;
+            transmission().remote._controller.refreshTorrents();
         } else {
             if (typeof(opts) != 'undefined' && typeof(opts.error) == 'function') {
                 opts.error();
