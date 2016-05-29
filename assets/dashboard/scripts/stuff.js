@@ -164,3 +164,8 @@ function setupResultEvents() {
     // time ago
     $('time.timeago').timeago();
 }
+
+function trLoaded() {
+    // I prefer to sort torrents by age
+    transmission().setSortMethod('age');
+}
