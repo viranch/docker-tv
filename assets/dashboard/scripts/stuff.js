@@ -39,11 +39,11 @@ function search() {
                 var items = $(data).find("item");
 
                 results = mapArray(items, function(item) {
-                    var hash = splitLast(item.find("link").text(), "/");
+                    var hash = splitLast(item.find("link").text(), "/").toUpperCase();
                     return {
                         title: item.find("title").text(),
                         link: item.find("link").text(),
-                        torrent_link: "https://torcache.net/torrent/"+hash.toUpperCase()+".torrent",
+                        torrent_link: "https://torcache.net/torrent/"+hash+".torrent",
                         magnet_link: "magnet:?xt=urn:btih:"+hash,
                         date: (new Date(item.find("pubDate").text())).toISOString(),
                         info: item.find("description").text().replace(/ Hash: .*$/g, ''),
