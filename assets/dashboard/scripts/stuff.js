@@ -144,6 +144,11 @@ function triggerUriSearch() {
 
 $(document).ready(function() {
     $('#search-form').submit(search);
+    $('#results').on('hide.bs.modal', function() {
+        // modal stays at last search result's scroll position
+        // reset to top before hiding modal so that next search results will be scolled to top
+        $(this).find('.modal-body').scrollTop(0);
+    });
     $('#results').on('hidden.bs.modal', function() {
         $('#search-q').focus();
     });
