@@ -51,6 +51,16 @@ input.form-control.simple:focus {
 }
 /* scrollable modal end */
 
+.anchor-button {
+    cursor: pointer;
+    background: transparent;
+    border: 0;
+    line-height: 1;
+    color: black;
+    text-shadow: 0 1px 0 white;
+    opacity: 0.5;
+}
+
 button.btn-sm {
   padding-top: 5px;
   padding-bottom: 5px;

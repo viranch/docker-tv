@@ -1,4 +1,5 @@
-var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg: ko.observable('&nbsp;') };
+var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg: ko.observable('&nbsp;'), free_space: ko.observable('') };
+
 var tr_token;
 var search_cache = {};
 
@@ -74,8 +75,12 @@ function showResults(query, results) {
     $('#results').modal('show');
 }
 
+function trFrame() {
+    return $('#tr-frame')[0].contentWindow;
+}
+
 function transmission() {
-    return $('#tr-frame')[0].contentWindow.transmission;
+    return trFrame().transmission;
 }
 
 function download() {
@@ -134,6 +139,15 @@ function addDownload(url, anchor, opts) {
     });
 }
 
+function refreshFreeSpace() {
+    var btn = $(this).button('loading');
+    downloads_dir = trFrame().$('#download-dir').val();
+    transmission().remote.getFreeSpace(downloads_dir, function(path, bytes) {
+        ko_data.free_space(trFrame().Transmission.fmt.size(bytes));
+        $(this).button('reset');
+    }, btn);
+}
+
 function triggerUriSearch() {
     var query = getUriParam('q');
     if (!query) return;
@@ -152,6 +166,9 @@ $(document).ready(function() {
     $('#results').on('hidden.bs.modal', function() {
         $('#search-q').focus();
     });
+
+    $('.anchor-button').focus(function() { $(this).blur(); })
+    $('#free-space-refresh').click(refreshFreeSpace);
 
     $('#search-q').focus();
     ko.applyBindings(ko_data);
@@ -173,4 +190,7 @@ function setupResultEvents() {
 function trLoaded() {
     // I prefer to sort torrents by age
     transmission().setSortMethod('age');
+
+    // Load free space
+    $('#free-space-refresh').click();
 }
