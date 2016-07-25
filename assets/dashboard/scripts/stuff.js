@@ -40,11 +40,10 @@ function search() {
                 var items = $(data).find("item");
 
                 results = mapArray(items, function(item) {
-                    var hash = splitLast(item.find("link").text(), "/").toUpperCase();
+                    var hash = splitLast(item.find("link").text(), "/");
                     return {
                         title: item.find("title").text(),
                         link: item.find("link").text(),
-                        torrent_link: "https://torcache.net/torrent/"+hash+".torrent",
                         magnet_link: "magnet:?xt=urn:btih:"+hash,
                         date: (new Date(item.find("pubDate").text())).toISOString(),
                         info: item.find("description").text().replace(/ Hash: .*$/g, ''),
@@ -91,20 +90,10 @@ function download() {
     anchor.button('loading');
 
     // backend rolling
-    var url = anchor.attr('href');
-    addDownload(url, anchor, {
-        error: function() {
-            var magnet = anchor.attr('data-magnet');
-            addDownload(magnet, anchor);
-        }
-    });
-
-    return false;
-}
-
-function addDownload(url, anchor, opts) {
+    var magnet = anchor.attr('href');
     var paused = !transmission().shouldAddedTorrentsStart();
-    var o = { method: 'torrent-add', arguments: { filename: url, paused: paused } }
+    var o = { method: 'torrent-add', arguments: { filename: magnet, paused: paused } }
+
     transmission().remote.sendRequest(o, function(data) {
         anchor.button('reset');
         if (data.result == "success") {
@@ -120,10 +109,6 @@ function addDownload(url, anchor, opts) {
             ;
             transmission().remote._controller.refreshTorrents();
         } else {
-            if (typeof(opts) != 'undefined' && typeof(opts.error) == 'function') {
-                opts.error();
-                return false;
-            }
             var error = data.result;
             if (error.indexOf(":") > -1) {
                 toks = error.split(":");
@@ -137,6 +122,8 @@ function addDownload(url, anchor, opts) {
             ;
         }
     });
+
+    return false;
 }
 
 function refreshFreeSpace() {
