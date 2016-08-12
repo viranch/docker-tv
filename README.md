@@ -70,7 +70,7 @@ The configuration for minidlna sits at `/etc/minidlna.conf` inside the container
 
 Its very easy to run this image in a small container on cloud with [HYPER_](https://hyper.sh/):
 
-- Create an account on Hyper from [here](https://console.hyper.sh/register), free $20 credit for limited time.
+- Create an account on Hyper from [here](https://console.hyper.sh/register/invite/aMwmwDQ8dPcbKmzMqY2KCdrLgw4xd9sd), includes free $10 credit.
 
 - Setup credentials [here](https://console.hyper.sh/account/credential), and save the generated keys.
 
