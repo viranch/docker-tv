@@ -60,14 +60,14 @@ function feed() {
         cookie_file="/tmp/surecook"
         rm -f $cookie_file
         while [[ ! -f $cookie_file ]]; do urlread -s -XHEAD https://www.suresome.com/ -c $cookie_file > /dev/null; done
-        urlread -s --compressed https://www.suresome.com/proxy/nph-secure/00A/https/torrentz.in/feed%3fq%3d"$@" -b $cookie_file
+        urlread -s --compressed https://www.suresome.com/proxy/nph-secure/00A/https/torrentz2.eu/feed%3ff%3d"$@" -b $cookie_file
     else
-        urlread -s https://torrentz.in/feed?q="$@"
+        urlread -s https://torrentz2.eu/feed?f="$@"
     fi
 }
 
 function search() {
-    feed "$@" | grep "<link>.*$" -o | tail -n +2 | sed 's/<link>http:\/\/torrentz\.in\///g' | sed 's/<\/link>//g'
+    feed "$@" | grep "<link>.*$" -o | tail -n +2 | sed 's/<link>http:\/\/torrentz2\.eu\///g' | sed 's/<\/link>//g'
 }
 
 function get_torrent() {
@@ -93,7 +93,7 @@ function add_torrent() {
 
 # download .torrent for shows aired today
 echo "Getting episode list..."
-urlread -s $link | grep "<title>\|<dc:date>" | grep `date "$date_opts" +%F` -B1 | grep  ">.* S[0-9]\+E[0-9]\+" -o | sed 's/>//g' | sed 's/\s*(.*)//g' | while read title
+urlread -s $link | grep "<title>\|<dc:date>" | grep `gdate "$date_opts" +%F` -B1 | grep  ">.* S[0-9]\+E[0-9]\+" -o | sed 's/>//g' | sed 's/\s*(.*)//g' | while read title
 do
     add_torrent "$title" "$suff"
 done

@@ -35,7 +35,7 @@ function search() {
     if (search_cache[query]) {
         showResults(query, search_cache[query]);
     } else {
-        $.ajax("/tz/feed?q="+encodeURIComponent(query))
+        $.ajax("/tz/feed?f="+encodeURIComponent(query))
             .done(function(data) {
                 var items = $(data).find("item");
 
