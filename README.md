@@ -66,6 +66,36 @@ Note that the number of RSS feed links and set of `TV_OPTS` should be equal. The
 
 The configuration for minidlna sits at `/etc/minidlna.conf` inside the container (access a running container with `docker exec -it tv bash`, where `tv` is the container name). You can copy it on the host, customize it and mount it with a new container using `-v /path/to/minidlna.conf:/etc/minidlna.conf` in the above run command.
 
+### Running your own instance on cloud
+
+Its very easy to run this image in a small container on cloud with [HYPER_](https://hyper.sh/):
+
+- Create an account on Hyper from [here](https://console.hyper.sh/register), free $20 credit for limited time.
+
+- Setup credentials [here](https://console.hyper.sh/account/credential), and save the generated keys.
+
+- Setup hyper on your Mac, enter your keys on prompt:
+```
+brew install hyper
+hyper config tcp://us-west-1.hyper.sh:443
+```
+
+- Now proceed to run the container:
+```
+hyper pull viranch/tv
+hyper run --size s2 -d --name tv -p 80:80 viranch/tv
+IP=`hyper fip allocate 1` # one-time
+hyper fip associate $IP tv
+```
+
+- Open http://$IP/ in your browser!
+
+- Remove the container (optional):
+```
+hyper rm `hyper stop tv`
+hyper fip release $IP
+```
+
 ### Coming up
 
 * [mpd](http://www.musicpd.org/) for playing & controlling your music remotely.
