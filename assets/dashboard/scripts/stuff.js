@@ -33,32 +33,47 @@ function search() {
     var query = $('#search-q').val();
 
     if (search_cache[query]) {
-        showResults(query, search_cache[query]);
+        showResults(query);
     } else {
         $.ajax("/tz/feed?f="+encodeURIComponent(query))
             .done(function(data) {
-                var items = $(data).find("item");
-
-                results = mapArray(items, function(item) {
-                    var hash = splitLast(item.find("link").text(), "/");
-                    return {
-                        title: item.find("title").text(),
-                        link: item.find("link").text(),
-                        magnet_link: "magnet:?xt=urn:btih:"+hash,
-                        date: (new Date(item.find("pubDate").text())).toISOString(),
-                        info: item.find("description").text().replace(/ Hash: .*$/g, ''),
-                    };
-                });
-                search_cache[query] = results;
-
-                showResults(query, results);
+                handleResults(query, data);
+            })
+            .fail(function(xhr, textStatus, err) {
+                console.log('FAILED');
+                xml = xhr.responseText.split('&').join('&amp;');
+                data = $.parseXML(xml);
+                handleResults(query, data);
             });
     }
 
     return false;
 }
 
-function showResults(query, results) {
+function handleResults(query, data) {
+    var results = parseResults(data);
+    search_cache[query] = results;
+    showResults(query);
+}
+
+function parseResults(data) {
+    var items = $(data).find("item");
+
+    return mapArray(items, function(item) {
+        var hash = splitLast(item.find("link").text(), "/");
+        return {
+            title: item.find("title").text(),
+            link: item.find("link").text(),
+            magnet_link: "magnet:?xt=urn:btih:"+hash,
+            date: (new Date(item.find("pubDate").text())).toISOString(),
+            info: item.find("description").text().replace(/ Hash: .*$/g, ''),
+        };
+    });
+}
+
+function showResults(query) {
+    var results = search_cache[query];
+
     $('#search-q').select();
     if (results.length == 0) {
         ko_data.status_msg('<i class="icon icon-warning-sign"></i> No search results! Try searching something else..');
