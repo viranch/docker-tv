@@ -28,6 +28,7 @@ function getUriParam(param) {
 }
 
 function search() {
+    $('#search-q').blur(); // get rid of the browser autocomplete by focusing out of the text input
     ko_data.status_msg('Searching...');
 
     var query = $('#search-q').val();
