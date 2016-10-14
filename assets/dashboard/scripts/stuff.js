@@ -62,13 +62,18 @@ function parseResults(data) {
 
     return mapArray(items, function(item) {
         var hash = splitLast(item.find("link").text(), "/");
+        var people = item.find("description").text().match(/Seeds: (\d+) Peers: (\d+)/);
         return {
             title: item.find("title").text(),
             link: item.find("link").text(),
             magnet_link: "magnet:?xt=urn:btih:"+hash,
             date: (new Date(item.find("pubDate").text())).toISOString(),
             info: item.find("description").text().replace(/ Hash: .*$/g, ''),
+            seeds: Number(people[1]),
+            peers: Number(people[2]),
         };
+    }).sort(function(a, b) {
+        return (b.seeds*2+b.peers)-(a.seeds*2+a.peers);
     });
 }
 
