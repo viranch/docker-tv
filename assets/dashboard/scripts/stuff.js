@@ -33,7 +33,7 @@ function search() {
 
     var query = $('#search-q').val();
 
-    if (search_cache[query]) {
+    if ((search_cache[query] || []).length > 0) {
         showResults(query);
     } else {
         $.ajax("/tz/feed?f="+encodeURIComponent(query))
