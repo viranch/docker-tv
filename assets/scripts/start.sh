@@ -32,6 +32,7 @@ rm -f /opt/tv.cron
 for i in "${!FEEDS[@]}"; do
     feed="${FEEDS[$i]}"
     opts="${OPTS[$i]}"
+    test -n "$AUTH_USER" && opts="$opts -a $AUTH_USER:$AUTH_PASS"
     test -n "$feed" && echo "30 4 * * * /opt/scripts/tv.py -l $feed $opts" >> /opt/tv.cron
 done
 test -f /opt/tv.cron && crontab /opt/tv.cron

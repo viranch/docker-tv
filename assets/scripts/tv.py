@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys, os
+import sys
 import argparse
 import urllib, urllib2, base64
 from lxml import etree
@@ -9,6 +9,7 @@ import json
 
 
 parser = argparse.ArgumentParser()
+parser.add_argument("-a", "--auth", help="Basic authentication credentials in USER:PASSWORD format", default=None)
 parser.add_argument("-l", "--link", help="Link to episode RSS feed", required=True)
 parser.add_argument("-s", "--suffix", help="Torrent search suffix (eg, 720p)", default='')
 args = parser.parse_args()
@@ -17,11 +18,8 @@ args = parser.parse_args()
 opener = urllib2.build_opener()
 opener.addheaders = [('User-Agent','Mozilla/5.0 (Macintosh; Intel Mac OS X 10_7_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.93 Safari/537.36')]
 
-# try to read auth details from ENV
-try:
-    basic_auth = base64.b64encode(os.environ['AUTH_USER'] + ':' + os.environ['AUTH_PASS'])
-except KeyError:
-    basic_auth = None
+# encode basic auth
+basic_auth = base64.b64encode(args.auth) if args.auth else None
 
 
 def urlread(url, params={}, auth=False):
