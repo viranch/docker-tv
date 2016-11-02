@@ -10,7 +10,7 @@ RUN FOREGO_URL="https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.t
     curl -kL $FOREGO_URL | tar -C /usr/local/bin/ -zx
 
 # Install github.com/viranch/tivo
-RUN TIVO_URL="https://github.com/viranch/tivo/releases/download/0.1/tivo-linux-amd64-0.1.tar.gz"; \
+RUN TIVO_URL="https://github.com/viranch/tivo/releases/download/0.2/tivo-linux-amd64-0.2.tar.gz"; \
     curl -kL $TIVO_URL | tar -C /usr/local/bin/ -zx
 
 # Setup apache
