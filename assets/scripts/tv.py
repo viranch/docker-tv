@@ -40,8 +40,8 @@ class FollowShows(object):
 
     def aired_today(self):
         today = date.today().strftime('%Y-%m-%dT')
-        title_regex = re.compile('(.* S\\d{2}E\\d{2}) ')
-        replace_regex = re.compile('\\s*\\(.*\\)')
+        title_regex = re.compile(r'(.* S\d{2}E\d{2}) ')
+        replace_regex = re.compile(r'\s*\(.*\)')
         doc = urlread(self.feed)
         for title in doc.xpath("//item/*[name()='dc:date' and contains(text(), '" + today + "')]/../title/text()"):
             yield replace_regex.sub('', title_regex.match(title).group(0).strip())
@@ -55,18 +55,17 @@ class Torrentz(object):
     def search(self, title):
         print 'Searching', "'"+title+"'", '...',
         sys.stdout.flush()
-        torrents = []
         doc = urlread('http://localhost/tz/feed', params={'f': title}, auth=True)
+
+        score = 0
+        winner = None
         for item in doc.xpath('//item/description/text()'):
             m = self.torrent_regex.match(item)
-            torrents.append({
-                'size': m.group(1),
-                'seeds': int(m.group(2)),
-                'peers': int(m.group(3)),
-                'hash': m.group(4),
-            })
-        winner = max(torrents, key=(lambda t: t['seeds']*2 + t['peers']))
-        print 'found', winner['hash']
+            seeds = int(m.group(2))
+            peers = int(m.group(3))
+            if (seeds*2 + peers) > score:
+                winner = m.group(4)
+        print 'found', winner
         return winner
 
 
@@ -104,8 +103,8 @@ tr_client = Transmission()
 
 def download(title, suffix=''):
     title = ' '.join([title, suffix]).strip()
-    torrent = search_engine.search(title)
-    magnet = 'magnet:?xt=urn:btih:' + torrent['hash']
+    torrent_hash = search_engine.search(title)
+    magnet = 'magnet:?xt=urn:btih:' + torrent_hash
     tr_client.add_to_transmission(magnet)
 
 
