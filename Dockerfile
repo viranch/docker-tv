@@ -2,12 +2,16 @@ FROM debian:jessie
 
 # Download & install all required packages
 RUN apt-get update; \
-    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon curl heirloom-mailx dnsutils cron python python-lxml minidlna; \
+    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon curl heirloom-mailx dnsutils cron minidlna; \
     rm -rf /var/lib/apt/lists/*
 
 # Install forego
 RUN FOREGO_URL="https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz"; \
     curl -kL $FOREGO_URL | tar -C /usr/local/bin/ -zx
+
+# Install github.com/viranch/tivo
+RUN TIVO_URL="https://github.com/viranch/tivo/releases/download/0.1/tivo-linux-amd64-0.1.tar.gz"; \
+    curl -kL $TIVO_URL | tar -C /usr/local/bin/ -zx
 
 # Setup apache
 RUN for mod in headers proxy proxy_ajp proxy_balancer proxy_connect proxy_ftp proxy_html proxy_http proxy_scgi ssl xml2enc; do a2enmod $mod; done
