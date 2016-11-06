@@ -65,7 +65,10 @@ class Torrentz(object):
             peers = int(m.group(3))
             if (seeds*2 + peers) > score:
                 winner = m.group(4)
-        print 'found', winner
+        if winner is None:
+            print 'not found'
+        else:
+            print 'found', winner
         return winner
 
 
@@ -104,8 +107,9 @@ tr_client = Transmission()
 def download(title, suffix=''):
     title = ' '.join([title, suffix]).strip()
     torrent_hash = search_engine.search(title)
-    magnet = 'magnet:?xt=urn:btih:' + torrent_hash
-    tr_client.add_to_transmission(magnet)
+    if torrent_hash is not None:
+        magnet = 'magnet:?xt=urn:btih:' + torrent_hash
+        tr_client.add_to_transmission(magnet)
 
 
 for title in tvdb.aired_today():
