@@ -2,7 +2,7 @@ FROM debian:jessie
 
 # Download & install all required packages
 RUN apt-get update; \
-    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon curl heirloom-mailx dnsutils cron minidlna; \
+    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon curl heirloom-mailx dnsutils ca-certificates cron minidlna; \
     rm -rf /var/lib/apt/lists/*
 
 # Install forego
