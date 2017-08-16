@@ -112,13 +112,12 @@ function parseStResults(data) {
     var items = $(data).find("item");
 
     return mapArray(items, function(item) {
-        var hash = splitN(item.find("link").text(), "/", -2);
         var desc = item.find("description").text();
         var people = desc.match(/(\d+) seeder\(s\), (\d+) leecher\(s\), /);
         return {
             title: item.find("title").text(),
             link: item.find("guid").text(),
-            magnet_link: "magnet:?xt=urn:btih:"+hash,
+            magnet_link: item.find("link").text(),
             date: (new Date(item.find("pubDate").text())).toISOString(),
             info: desc,
             seeds: Number(people[1]),
