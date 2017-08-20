@@ -71,6 +71,9 @@ function search() {
             .done(function(data) {
                 var results = parseStResults(data);
                 handleResults(query, results);
+            })
+            .fail(function(xhr, textStatus, err) {
+                handleResults(query, []);
             });
     }
 
