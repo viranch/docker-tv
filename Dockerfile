@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM arm32v7/debian:jessie
 
 # Download & install all required packages
 RUN apt-get update; \
@@ -6,12 +6,12 @@ RUN apt-get update; \
     rm -rf /var/lib/apt/lists/*
 
 # Install forego
-RUN FOREGO_URL="https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz"; \
-    curl -kL $FOREGO_URL | tar -C /usr/local/bin/ -zx
+RUN FOREGO_URL="https://github.com/viranch/forego/releases/download/0.16.2/forego-linux-armv7.tar.gz"; \
+    curl -L $FOREGO_URL | tar -C /usr/local/bin/ -zx
 
 # Install github.com/viranch/tivo
 RUN TIVO_VERSION="0.5"; \
-    TIVO_URL="https://github.com/viranch/tivo/releases/download/$TIVO_VERSION/tivo-linux-amd64-$TIVO_VERSION.tar.gz"; \
+    TIVO_URL="https://github.com/viranch/tivo/releases/download/$TIVO_VERSION/tivo-linux-armv7-$TIVO_VERSION.tar.gz"; \
     curl -kL $TIVO_URL | tar -C /usr/local/bin/ -zx
 
 # Setup apache
