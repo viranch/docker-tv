@@ -2,7 +2,7 @@ FROM debian:jessie
 
 # Download & install all required packages
 RUN apt-get update; \
-    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon curl heirloom-mailx dnsutils ca-certificates cron minidlna; \
+    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon curl heirloom-mailx dnsutils ca-certificates cron; \
     rm -rf /var/lib/apt/lists/*
 
 # Install forego
@@ -21,9 +21,6 @@ COPY assets/dashboard/ assets/apaxy/ /var/www/html/
 
 # Setup transmission
 COPY assets/config/transmission.json /opt/
-
-# Setup minidlna
-COPY assets/config/minidlna.conf /etc/minidlna.conf
 
 # Add required scripts
 COPY assets/scripts/ /opt/scripts/
