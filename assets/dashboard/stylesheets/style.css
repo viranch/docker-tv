@@ -1,5 +1,6 @@
 .row {
     margin-right: 0px; /* To remove the extra space on the right which causes a vertical scrollbar to show up */
+    margin-left: 0px; /* To fix left overflow in mobile devices */
 }
 
 .has-below {

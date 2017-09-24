@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard</title>
 
   <!-- opensearch -->
@@ -47,11 +48,9 @@
           </form>
         </div>
         <div class="row">
-          <div class="col-md-6" style="padding-left: 0px;">
+          <div class="col-md-12" style="padding-left: 0px;">
             <small><em id="search-status" data-bind="html: status_msg"></em></small>
-          </div>
-          <div class="col-md-6" data-bind="visible: free_space().length > 0">
-            <small class="pull-right">
+            <small class="pull-right" data-bind="visible: free_space().length > 0">
               <em id="free-space" data-bind="text: 'Free space: '+free_space()"></em>
               <button type="button" class="anchor-button" id="free-space-refresh" data-loading-text="<i class='icon icon-refresh icon-spin'></i>">
                 <i class="icon icon-refresh"></i>
