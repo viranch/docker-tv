@@ -47,7 +47,6 @@ docker run [...] -e AUTH_USER=bob -e AUTH_PASS=myprecious [...] viranch/tv
   - The Transmission web interface
   - Web view of the downloads directory (hosted by Apache).
 - A daily cron job that looks for new episodes from the RSS link provided in run command.
-- [MiniDLNA](http://sourceforge.net/projects/minidlna/) media streaming server, which streams the download directory; so anything downloaded with torrents is readily available for streaming to a TV or any UPnP/DLNA client (eg, VLC Media Player).
 
 ### Customizing
 
@@ -61,10 +60,6 @@ This environment variable is used to pass extra options to the cronjob [script](
 You can pass multiple comma-separated RSS feed links to `RSS_FEED` variable in the run command.
 You can also pass multiple sets of `TV_OPTS` (comma-separated, eg: `TV_OPTS=-s 720p,-s eztv` can also be passed.
 Note that the number of RSS feed links and set of `TV_OPTS` should be equal. The first RSS link will be used with first options set in `TV_OPTS`, second link for second options set, and so on.
-
-##### Media streaming server (MiniDLNA)
-
-The configuration for minidlna sits at `/etc/minidlna.conf` inside the container (access a running container with `docker exec -it tv bash`, where `tv` is the container name). You can copy it on the host, customize it and mount it with a new container using `-v /path/to/minidlna.conf:/etc/minidlna.conf` in the above run command.
 
 ### Running your own instance on cloud
 
