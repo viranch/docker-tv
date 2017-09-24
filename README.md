@@ -90,7 +90,3 @@ hyper fip associate $IP tv
 hyper rm `hyper stop tv`
 hyper fip release $IP
 ```
-
-### Coming up
-
-* [mpd](http://www.musicpd.org/) for playing & controlling your music remotely.
