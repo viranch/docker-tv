@@ -1,4 +1,4 @@
-[![Docker Pulls](https://img.shields.io/docker/pulls/viranch/tv.svg?maxAge=604800)](https://hub.docker.com/r/viranch/tv/) [![Docker Stars](https://img.shields.io/docker/stars/viranch/tv.svg?maxAge=604800)](https://hub.docker.com/r/viranch/tv/) [![Layers](https://images.microbadger.com/badges/image/viranch/tv.svg)](https://hub.docker.com/r/viranch/tv/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/viranch/tv.svg?maxAge=604800)](https://hub.docker.com/r/viranch/tv/) [![Docker Stars](https://img.shields.io/docker/stars/viranch/tv.svg?maxAge=604800)](https://hub.docker.com/r/viranch/tv/) [![Layers](https://images.microbadger.com/badges/image/viranch/tv:armv7.svg)](https://hub.docker.com/r/viranch/tv/)
 
 # docker-tv
 Entertainment automation for home (RaspberryPi) and VPS in a docker image
