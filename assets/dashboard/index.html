@@ -63,11 +63,8 @@
 
     <!-- iframes -->
     <div class="row" id="iframes-container">
-      <div class="col-md-6 expand">
+      <div class="col-md-12 expand">
         <iframe src="/transmission/web/" frameborder="0" id="tr-frame" onload="trLoaded()"></iframe>
-      </div>
-      <div class="col-md-6 expand">
-        <iframe src="/downloads/" frameborder="0"></iframe>
       </div>
     </div>
   </div>
@@ -93,19 +90,17 @@
                   </span>
                 </div>
                 <div class="issue-info">
+                  <a class="btn btn-small btn-default download-btn" data-bind="attr: { href: magnet_link }" data-loading-text="<i class='icon-spinner icon-spin icon-large'></i>&nbsp;Adding...">
+                    <i class="icon icon-download-alt"></i>
+                    &nbsp;
+                    Download
+                  </a>
                   <span data-bind="text: info"></span>
                   <div class="pull-right">
                     <small>
                       <time class="timeago" data-bind="attr: { datetime: date }"></time>
                     </small>
                   </div>
-                </div>
-                <div class="issue-actions">
-                  <a class="btn btn-small btn-default download-btn" data-bind="attr: { href: magnet_link }" data-loading-text="<i class='icon-spinner icon-spin icon-large'></i>&nbsp;Adding...">
-                    <i class="icon icon-download-alt"></i>
-                    &nbsp;
-                    Download
-                  </a>
                 </div>
               </li>
             </ul>

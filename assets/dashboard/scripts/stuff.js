@@ -174,7 +174,7 @@ function download() {
                 .unbind('click')
                 .removeClass("btn-default")
                 .addClass("btn-info")
-                .html('<i class="icon icon-ok"></i>&nbsp;Added to download&nbsp;<i class="icon icon-chevron-right"></i>')
+                .html('<i class="icon icon-ok"></i>&nbsp;Queued&nbsp;<i class="icon icon-chevron-right"></i>')
                 .click(function() {
                     $('#results').modal('hide');
                     return false;
