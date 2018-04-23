@@ -2,7 +2,7 @@ var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg
 
 var tr_token;
 var search_cache = {};
-var search_providers = 2;
+var search_providers = 1;
 var search_counter = 0;
 
 function splitN(string, delim, pos) {
@@ -55,18 +55,19 @@ function search() {
     if ((search_cache[query] || []).length > 0) {
         showResults(query);
     } else {
+        /*
         $.ajax("/tz/feed?f="+encodeURIComponent(query))
             .done(function(data) {
                 var results = parseTzResults(data);
                 handleResults(query, results);
             })
             .fail(function(xhr, textStatus, err) {
-                console.log('FAILED');
                 xml = xhr.responseText.split('&').join('&amp;');
                 data = $.parseXML(xml);
                 var results = parseTzResults(data);
                 handleResults(query, results);
             });
+        */
         $.ajax("/st/rss/all/ad/1/"+encodeURIComponent(query))
             .done(function(data) {
                 var results = parseStResults(data);
