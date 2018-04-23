@@ -68,7 +68,7 @@ function search() {
                 handleResults(query, results);
             });
         */
-        $.ajax("/st/rss/all/ad/1/"+encodeURIComponent(query))
+        $.ajax("/st/rss?query="+encodeURIComponent(query))
             .done(function(data) {
                 var results = parseStResults(data);
                 handleResults(query, results);
@@ -116,16 +116,16 @@ function parseStResults(data) {
     var items = $(data).find("item");
 
     return mapArray(items, function(item) {
-        var desc = item.find("description").text();
-        var people = desc.match(/(\d+) seeder\(s\), (\d+) leecher\(s\), /);
+        var seeds = Number(item.find('torznab\\:attr[name="seeders"]')[0].getAttribute('value'));
+        var peers = Number(item.find('torznab\\:attr[name="peers"]')[0].getAttribute('value'));
         return {
             title: item.find("title").text(),
             link: item.find("guid").text(),
-            magnet_link: item.find("link").text(),
+            magnet_link: item.find("magneturl").text(),
             date: (new Date(item.find("pubDate").text())).toISOString(),
-            info: desc,
-            seeds: Number(people[1]),
-            peers: Number(people[2]),
+            info: "Size: " + item.find("size").text() + " Seeds: " + seeds + " Peers: " + peers,
+            seeds: seeds,
+            peers: peers,
         };
     });
 }
