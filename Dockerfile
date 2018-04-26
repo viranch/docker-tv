@@ -10,7 +10,7 @@ RUN FOREGO_URL="https://github.com/viranch/forego/releases/download/0.16.2/foreg
     curl -L $FOREGO_URL | tar -C /usr/local/bin/ -zx
 
 # Install github.com/viranch/tivo
-RUN TIVO_VERSION="0.5"; \
+RUN TIVO_VERSION="0.6"; \
     TIVO_URL="https://github.com/viranch/tivo/releases/download/$TIVO_VERSION/tivo-linux-armv7-$TIVO_VERSION.tar.gz"; \
     curl -kL $TIVO_URL | tar -C /usr/local/bin/ -zx
 
