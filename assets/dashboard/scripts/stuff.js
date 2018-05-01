@@ -46,6 +46,16 @@ function getUriParam(param) {
     return null;
 }
 
+// from https://gist.github.com/lanqy/5193417
+// from http://scratch99.com/web-development/javascript/convert-bytes-to-mb-kb/
+function bytesToSize(bytes) {
+    var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return '0 B';
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    if (i == 0) return bytes + ' ' + sizes[i];
+    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+}
+
 function search() {
     $('#search-q').blur(); // get rid of the browser autocomplete by focusing out of the text input
     ko_data.status_msg('Searching...');
@@ -116,6 +126,7 @@ function parseStResults(data) {
     var items = $(data).find("item");
 
     return mapArray(items, function(item) {
+        var size = bytesToSize(Number(item.find("size").text()));
         var seeds = Number(item.find('torznab\\:attr[name="seeders"]')[0].getAttribute('value'));
         var peers = Number(item.find('torznab\\:attr[name="peers"]')[0].getAttribute('value'));
         return {
@@ -123,7 +134,7 @@ function parseStResults(data) {
             link: item.find("guid").text(),
             magnet_link: item.find("magneturl").text(),
             date: (new Date(item.find("pubDate").text())).toISOString(),
-            info: "Size: " + item.find("size").text() + " Seeds: " + seeds + " Peers: " + peers,
+            info: "Size: " + size + " Seeds: " + seeds + " Peers: " + peers,
             seeds: seeds,
             peers: peers,
         };
