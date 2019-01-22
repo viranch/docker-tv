@@ -1,13 +1,19 @@
-FROM debian:jessie
+FROM lsiobase/mono:xenial
 
 # Download & install all required packages
 RUN apt-get update; \
-    apt-get install -y --no-install-recommends apache2 libapache2-mod-proxy-html transmission-daemon curl heirloom-mailx dnsutils ca-certificates cron; \
+    apt-get install -y --no-install-recommends apache2 apache2-bin transmission-daemon curl heirloom-mailx dnsutils ca-certificates cron jq; \
     rm -rf /var/lib/apt/lists/*
 
 # Install forego
 RUN FOREGO_URL="https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz"; \
     curl -kL $FOREGO_URL | tar -C /usr/local/bin/ -zx
+
+# Install Jackett
+RUN mkdir -p /opt/jackett /data/jackett/config; \
+    JACKETT_RELEASE=`curl -s "https://api.github.com/repos/Jackett/Jackett/releases/latest" | jq -r .tag_name`; \
+    JACKETT_URL=`curl -s https://api.github.com/repos/Jackett/Jackett/releases/tags/"${JACKETT_RELEASE}" | jq -r '.assets[].browser_download_url' | grep Mono`; \
+    curl -L "$JACKETT_URL" | tar -C /opt/jackett --strip-components=1 -zx
 
 # Install github.com/viranch/tivo
 RUN TIVO_VERSION="0.7"; \

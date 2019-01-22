@@ -1,3 +1,4 @@
 transmission: /usr/bin/transmission-daemon -f --config-dir /data/transmission
+jackett: mono /opt/jackett/JackettConsole.exe --NoUpdates
 web: /usr/sbin/apache2ctl -DFOREGROUND
 cron: /usr/sbin/cron -f
