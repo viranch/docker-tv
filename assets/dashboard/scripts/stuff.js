@@ -98,7 +98,7 @@ function parseJkResults(data) {
         return {
             title: item.find("title").text(),
             link: item.find("guid").text(),
-            magnet_link: item.find("guid").text(),
+            magnet_link: item.find('torznab\\:attr[name="magneturl"]')[0].getAttribute('value'),
             date: (new Date(item.find("pubDate").text())).toISOString(),
             size: bytesToSize(Number(item.find("size").text())),
             seeds: Number(item.find('torznab\\:attr[name="seeders"]')[0].getAttribute('value')),
