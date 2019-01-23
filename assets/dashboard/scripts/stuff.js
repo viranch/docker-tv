@@ -95,17 +95,14 @@ function parseJkResults(data) {
     var items = $(data).find("item");
 
     return mapArray(items, function(item) {
-        var size = bytesToSize(Number(item.find("size").text()));
-        var seeds = Number(item.find('torznab\\:attr[name="seeders"]')[0].getAttribute('value'));
-        var peers = Number(item.find('torznab\\:attr[name="peers"]')[0].getAttribute('value'));
         return {
             title: item.find("title").text(),
             link: item.find("guid").text(),
             magnet_link: item.find("guid").text(),
             date: (new Date(item.find("pubDate").text())).toISOString(),
-            info: "Size: " + size + " Seeds: " + seeds + " Peers: " + peers,
-            seeds: seeds,
-            peers: peers,
+            size: bytesToSize(Number(item.find("size").text())),
+            seeds: Number(item.find('torznab\\:attr[name="seeders"]')[0].getAttribute('value')),
+            peers: Number(item.find('torznab\\:attr[name="peers"]')[0].getAttribute('value')),
         };
     });
 }
