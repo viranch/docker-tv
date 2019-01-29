@@ -16,7 +16,7 @@ RUN mkdir -p /opt/jackett /data/jackett/config; \
     curl -L "$JACKETT_URL" | tar -C /opt/jackett --strip-components=1 -zx
 
 # Install github.com/viranch/tivo
-RUN TIVO_VERSION="0.7"; \
+RUN TIVO_VERSION="0.8"; \
     TIVO_URL="https://github.com/viranch/tivo/releases/download/$TIVO_VERSION/tivo-linux-amd64-$TIVO_VERSION.tar.gz"; \
     curl -kL $TIVO_URL | tar -C /usr/local/bin/ -zx
 
