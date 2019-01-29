@@ -1,6 +1,7 @@
-var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg: ko.observable('&nbsp;'), free_space: ko.observable('') };
+var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg: ko.observable('&nbsp;'), free_space: ko.observable(''), jk_api: ko.observable('') };
 
 var tr_token;
+var jk_api = "";
 var search_cache = {};
 var search_providers = 1;
 var search_counter = 0;
@@ -65,22 +66,9 @@ function search() {
     if ((search_cache[query] || []).length > 0) {
         showResults(query);
     } else {
-        /*
-        $.ajax("/tz/feed?f="+encodeURIComponent(query))
+        $.ajax("/jk/api/v2.0/indexers/all/results/torznab/api?t=search&apikey=" + jk_api + "&q=" + encodeURIComponent(query))
             .done(function(data) {
-                var results = parseTzResults(data);
-                handleResults(query, results);
-            })
-            .fail(function(xhr, textStatus, err) {
-                xml = xhr.responseText.split('&').join('&amp;');
-                data = $.parseXML(xml);
-                var results = parseTzResults(data);
-                handleResults(query, results);
-            });
-        */
-        $.ajax("/st/rss?query="+encodeURIComponent(query))
-            .done(function(data) {
-                var results = parseStResults(data);
+                var results = parseJkResults(data);
                 handleResults(query, results);
             })
             .fail(function(xhr, textStatus, err) {
@@ -103,40 +91,18 @@ function handleResults(query, results) {
     }
 }
 
-function parseTzResults(data) {
+function parseJkResults(data) {
     var items = $(data).find("item");
 
     return mapArray(items, function(item) {
-        var hash = splitN(item.find("link").text(), "/");
-        var desc = item.find("description").text();
-        var people = desc.match(/Seeds: (\d+) Peers: (\d+)/);
-        return {
-            title: item.find("title").text(),
-            link: item.find("link").text(),
-            magnet_link: "magnet:?xt=urn:btih:"+hash,
-            date: (new Date(item.find("pubDate").text())).toISOString(),
-            info: desc.replace(/ Hash: .*$/g, ''),
-            seeds: Number(people[1]),
-            peers: Number(people[2]),
-        };
-    });
-}
-
-function parseStResults(data) {
-    var items = $(data).find("item");
-
-    return mapArray(items, function(item) {
-        var size = bytesToSize(Number(item.find("size").text()));
-        var seeds = Number(item.find('torznab\\:attr[name="seeders"]')[0].getAttribute('value'));
-        var peers = Number(item.find('torznab\\:attr[name="peers"]')[0].getAttribute('value'));
         return {
             title: item.find("title").text(),
             link: item.find("guid").text(),
-            magnet_link: item.find("magneturl").text(),
+            magnet_link: item.find('torznab\\:attr[name="magneturl"]')[0].getAttribute('value'),
             date: (new Date(item.find("pubDate").text())).toISOString(),
-            info: "Size: " + size + " Seeds: " + seeds + " Peers: " + peers,
-            seeds: seeds,
-            peers: peers,
+            size: bytesToSize(Number(item.find("size").text())),
+            seeds: Number(item.find('torznab\\:attr[name="seeders"]')[0].getAttribute('value')),
+            peers: Number(item.find('torznab\\:attr[name="peers"]')[0].getAttribute('value')),
         };
     });
 }
@@ -229,7 +195,11 @@ function triggerUriSearch() {
 }
 
 $(document).ready(function() {
-    $('#search-form').submit(search);
+    if (jk_api != "") {
+        $('#search-form').submit(search);
+        $('#search-q').focus();
+    }
+
     $('#results').on('hide.bs.modal', function() {
         // modal stays at last search result's scroll position
         // reset to top before hiding modal so that next search results will be scolled to top
@@ -242,7 +212,8 @@ $(document).ready(function() {
     $('.anchor-button').focus(function() { $(this).blur(); })
     $('#free-space-refresh').click(refreshFreeSpace);
 
-    $('#search-q').focus();
+    ko_data.jk_api(jk_api);
+
     ko.applyBindings(ko_data);
 
     triggerUriSearch();

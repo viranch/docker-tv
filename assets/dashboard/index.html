@@ -33,7 +33,7 @@
   <div class="container-fluid expand">
     <!-- search box input -->
     <div class="row">
-      <div class="col-md-8 col-md-offset-2">
+      <div data-bind="if: jk_api().length > 0" class="col-md-8 col-md-offset-2">
         <div class="row">
           <div class="has-below-tiny"></div>
           <form id="search-form">
@@ -95,7 +95,12 @@
                     &nbsp;
                     Download
                   </a>
-                  <span data-bind="text: info"></span>
+                  <span>Size:</span>
+                  <span data-bind="text: size"></span>
+                  <span>Seeds:</span>
+                  <span data-bind="text: seeds"></span>
+                  <span>Peers:</span>
+                  <span data-bind="text: peers"></span>
                   <div class="pull-right">
                     <small>
                       <time class="timeago" data-bind="attr: { datetime: date }"></time>
