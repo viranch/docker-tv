@@ -13,14 +13,6 @@ function splitN(string, delim, pos) {
     return tokens[pos];
 }
 
-function mapArray(array, func) {
-    var result = [];
-    array.each(function() {
-        result.push(func($(this)));
-    });
-    return result;
-}
-
 function getUriParam(param) {
     var query = window.location.search.substring(1).split('&');
     for (i in query) {
@@ -51,7 +43,7 @@ function search() {
     if ((search_cache[query] || []).length > 0) {
         showResults(query);
     } else {
-        $.ajax("/jk/api/v2.0/indexers/all/results/torznab/api?t=search&apikey=" + jk_api + "&q=" + encodeURIComponent(query))
+        $.ajax("/jk/api/v2.0/indexers/all/results?apikey=" + jk_api + "&Query=" + encodeURIComponent(query))
             .done(function(data) {
                 var results = parseJkResults(data);
                 handleResults(query, results);
@@ -72,17 +64,15 @@ function handleResults(query, results) {
 }
 
 function parseJkResults(data) {
-    var items = $(data).find("item");
-
-    return mapArray(items, function(item) {
+    return data.Results.map(function(item) {
         return {
-            title: item.find("title").text(),
-            link: item.find("guid").text(),
-            magnet_link: item.find('torznab\\:attr[name="magneturl"]')[0].getAttribute('value'),
-            date: (new Date(item.find("pubDate").text())).toISOString(),
-            size: bytesToSize(Number(item.find("size").text())),
-            seeds: Number(item.find('torznab\\:attr[name="seeders"]')[0].getAttribute('value')),
-            peers: Number(item.find('torznab\\:attr[name="peers"]')[0].getAttribute('value')),
+            title: item.Title,
+            link: item.Guid,
+            magnet_link: item.MagnetUri,
+            date: (new Date(item.PublishDate)).toISOString(),
+            size: bytesToSize(Number(item.Size)),
+            seeds: item.Seeders,
+            peers: item.Peers,
         };
     });
 }
