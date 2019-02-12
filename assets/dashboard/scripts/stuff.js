@@ -3,8 +3,6 @@ var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg
 var tr_token;
 var jk_api = "";
 var search_cache = {};
-var search_providers = 1;
-var search_counter = 0;
 
 function splitN(string, delim, pos) {
     pos = pos || -1;
@@ -19,19 +17,6 @@ function mapArray(array, func) {
     var result = [];
     array.each(function() {
         result.push(func($(this)));
-    });
-    return result;
-}
-
-function uniq(array, func) {
-    var result = [];
-    var map = [];
-    $.each(array, function(idx, value) {
-        var mapVal = func(value);
-        if (map.indexOf(mapVal) < 0) {
-            map.push(mapVal);
-            result.push(value);
-        }
     });
     return result;
 }
@@ -80,15 +65,10 @@ function search() {
 }
 
 function handleResults(query, results) {
-    results = (search_cache[query] || []).concat(results)
-        .sort(function(a, b) {
-            return (b.seeds*2+b.peers)-(a.seeds*2+a.peers);
-        });
-    search_cache[query] = uniq(results, function(r) { return r.magnet_link; });
-    if (++search_counter == search_providers) {
-        showResults(query);
-        search_counter = 0;
-    }
+    search_cache[query] = results.sort(function(a, b) {
+        return (b.seeds*2+b.peers)-(a.seeds*2+a.peers);
+    });
+    showResults(query);
 }
 
 function parseJkResults(data) {
