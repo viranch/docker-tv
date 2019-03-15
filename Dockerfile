@@ -10,7 +10,7 @@ RUN FOREGO_URL="https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.t
     curl -kL $FOREGO_URL | tar -C /usr/local/bin/ -zx
 
 # Install Jackett
-RUN mkdir -p /opt/jackett /data/jackett/config; \
+RUN mkdir -p /opt/jackett; \
     JACKETT_RELEASE=`curl -s "https://api.github.com/repos/Jackett/Jackett/releases/latest" | jq -r .tag_name`; \
     JACKETT_URL=`curl -s https://api.github.com/repos/Jackett/Jackett/releases/tags/"${JACKETT_RELEASE}" | jq -r '.assets[].browser_download_url' | grep Mono`; \
     curl -L "$JACKETT_URL" | tar -C /opt/jackett --strip-components=1 -zx
