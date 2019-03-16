@@ -3,7 +3,18 @@
 # docker-tv
 Entertainment automation for home (RaspberryPi) and VPS in a docker image
 
-### How does it look like?
+### What does the image contain?
+
+- [Transmission](http://www.transmissionbt.com/) server for downloading media from torrents.
+- [Jackett](https://github.com/Jackett/Jackett) as the torrent search aggregator backend.
+- Dashboard web page (`http://your-ip/`) that shows:
+  - Torrent search bar, with direct "Download" button in search results.
+  - The Transmission web interface
+  - Web view of the downloads directory (hosted by [Apache](https://httpd.apache.org/), styled by [Apaxy](https://oupala.github.io/apaxy/)).
+- Automatic download of new episodes as and when they're aired, using personalized feed from [showRSS](https://showrss.info/).
+- Push notifications of finished downloads via [PushBullet](https://www.pushbullet.com/).
+
+### What does it look like?
 
 ##### Search for torrents
 ![Search for torrents](https://raw.githubusercontent.com/viranch/docker-tv/master/screenshots/ss1.png)
@@ -20,73 +31,26 @@ Entertainment automation for home (RaspberryPi) and VPS in a docker image
 
 - Install [docker](https://docs.docker.com/installation/#installation) on it.
 
-- Create an account on [Followshows](http://followshows.com/) and follow your favourite shows. Get the link to the RSS feed (right side above the calendar on home page), it should be of the form: `http://followshows.com/feed/some_code`
+- Run the container:
+```
+docker run -d --name tv -v $PWD/data:/data -p 80:80 viranch/tv
+```
 
-- Optionally, use your email address for download complete push notifications.  If you're an iPhone user, get the [Boxcar2 app](https://boxcar.io/client) for push notifications. Once you sign up, you will get an email address (of the form `some_code@boxcar.io`), use it here and you'll get notifications straight on your iPhone. (I have not found any _free_ Android app for push notifications yet). Omit the `-e EMAIL=your@email.com` part in following command to disable notifications.
+- [OPTIONAL] To use episode download automation, create an account on [showRSS](https://showrss.info/) and add your favourite shows. Get the link to the RSS feed from "My Feed" tab, it should be of the form: `http://showrss.info/user/XXXXXXX.rss`. Pass this link as `RSS_FEED` environment variable:
+```
+docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.info/user/XXXXXXX.rss viranch/tv
+```
 
-- If you want to use the media streaming server (eg, on a RaspberryPi on home network), run the following:
+- [OPTIONAL] For getting push notifications of download complete on your phone, there are various options:
+  - Install the one of the Transmission Andoird apps ([Remote Transmission](https://play.google.com/store/apps/details?id=com.neogb.rtac) or [Transmission Remote](https://play.google.com/store/apps/details?id=net.yupol.transmissionremote.app)) and configure the remote server, then enable download finished notifications in app settings.
+  - If you have an iPhone, the other alternate is [PushBullet](https://www.pushbullet.com/). The image has in-built support for PushBullet, just declare your API token as `PB_TOKEN` environment variable.
 ```
-docker run -d --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data --net host viranch/tv
+docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.info/user/XXXXXXX.rss -e PB_TOKEN=XXXXX viranch/tv
 ```
-- If you don't want to use the media streaming server, (eg, when on a VPS), just change the `--net host` part in above command to `-p 80:80`:
-```
-docker run -d --name tv -e EMAIL=your@email.com -e RSS_FEED=http://followshows.com/feed/foo -e "TV_OPTS=-s 720p" -v $PWD/data:/data -p 80:80 viranch/tv
-```
-- Navigate to `http://your-ip/`. You can change the port with the `-p` switch, eg: `-p 8000:80`.
 
-- You can also optionally set a basic authentication username & password using the `-e AUTH_USER` & `-e AUTH_PASS` environment variables:
+- [OPTIONAL] To protect your container, you can also set a username & password for basic authentication, using the `AUTH_USER` & `AUTH_PASS` environment variables:
 ```
 docker run [...] -e AUTH_USER=bob -e AUTH_PASS=myprecious [...] viranch/tv
 ```
 
-### What does it contain?
-
-- [Transmission](http://www.transmissionbt.com/) server for downloading media from torrents.
-- Dashboard web page (`http://your-ip/`) that shows:
-  - Torrent search bar, with direct "Download" button in search results.
-  - The Transmission web interface
-  - Web view of the downloads directory (hosted by Apache).
-- A daily cron job that looks for new episodes from the RSS link provided in run command.
-
-### Customizing
-
-##### What is `$TV_OPTS`?
-
-This environment variable is used to pass extra options to the cronjob [script](https://github.com/viranch/docker-tv/blob/master/assets/tv.sh). The one in the sample run above adds the suffix "720p" for all torrent search queries.
- Check out the script to see what options you can pass.
-
-##### Multiple RSS feeds
-
-You can pass multiple comma-separated RSS feed links to `RSS_FEED` variable in the run command.
-You can also pass multiple sets of `TV_OPTS` (comma-separated, eg: `TV_OPTS=-s 720p,-s eztv` can also be passed.
-Note that the number of RSS feed links and set of `TV_OPTS` should be equal. The first RSS link will be used with first options set in `TV_OPTS`, second link for second options set, and so on.
-
-### Running your own instance on cloud
-
-Its very easy to run this image in a small container on cloud with [HYPER_](https://hyper.sh/):
-
-- Create an account on Hyper from [here](https://console.hyper.sh/register/invite/aMwmwDQ8dPcbKmzMqY2KCdrLgw4xd9sd), includes free $10 credit.
-
-- Setup credentials [here](https://console.hyper.sh/account/credential), and save the generated keys.
-
-- Setup hyper on your Mac, enter your keys on prompt:
-```
-brew install hyper
-hyper config tcp://us-west-1.hyper.sh:443
-```
-
-- Now proceed to run the container:
-```
-hyper pull viranch/tv
-hyper run --size s2 -d --name tv -p 80:80 viranch/tv
-IP=`hyper fip allocate 1` # one-time
-hyper fip associate $IP tv
-```
-
-- Open http://$IP/ in your browser!
-
-- Remove the container (optional):
-```
-hyper rm `hyper stop tv`
-hyper fip release $IP
-```
+- Navigate to `http://your-ip/`. You can change the port with the `-p` switch, eg: `-p 8000:80`.
