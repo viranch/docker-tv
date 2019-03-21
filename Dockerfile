@@ -2,7 +2,7 @@ FROM lsiobase/mono:xenial
 
 # Download & install all required packages
 RUN apt-get update; \
-    apt-get install -y --no-install-recommends apache2 apache2-bin transmission-daemon curl heirloom-mailx dnsutils ca-certificates cron jq; \
+    apt-get install -y --no-install-recommends apache2 apache2-bin transmission-daemon curl heirloom-mailx dnsutils ca-certificates cron jq libxml2-utils; \
     rm -rf /var/lib/apt/lists/*
 
 # Install forego
@@ -14,11 +14,6 @@ RUN mkdir -p /opt/jackett; \
     JACKETT_RELEASE=`curl -s "https://api.github.com/repos/Jackett/Jackett/releases/latest" | jq -r .tag_name`; \
     JACKETT_URL=`curl -s https://api.github.com/repos/Jackett/Jackett/releases/tags/"${JACKETT_RELEASE}" | jq -r '.assets[].browser_download_url' | grep Mono`; \
     curl -L "$JACKETT_URL" | tar -C /opt/jackett --strip-components=1 -zx
-
-# Install github.com/viranch/tivo
-RUN TIVO_VERSION="0.9"; \
-    TIVO_URL="https://github.com/viranch/tivo/releases/download/$TIVO_VERSION/tivo-linux-amd64-$TIVO_VERSION.tar.gz"; \
-    curl -kL $TIVO_URL | tar -C /usr/local/bin/ -zx
 
 # Setup apache
 RUN for mod in headers proxy proxy_ajp proxy_balancer proxy_connect proxy_ftp proxy_html proxy_http proxy_scgi ssl xml2enc; do a2enmod $mod; done
