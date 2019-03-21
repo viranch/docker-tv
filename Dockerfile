@@ -1,24 +1,26 @@
-FROM arm32v7/mono
+FROM arm32v7/ubuntu:xenial
 
 # Download & install all required packages
 RUN apt-get update; \
-    apt-get install -y --no-install-recommends apache2 apache2-bin transmission-daemon curl heirloom-mailx dnsutils ca-certificates cron jq; \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y --no-install-recommends apache2 apache2-bin transmission-daemon curl ca-certificates cron jq libxml2-utils; \
+    apt-get install -y apt-transport-https; \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF; \
+    echo "deb http://download.mono-project.com/repo/ubuntu xenial main" > /etc/apt/sources.list.d/mono-official.list; \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5CDF62C7AE05CC847657390C10E11090EC0E438; \
+    echo "deb https://mediaarea.net/repo/deb/ubuntu xenial main" > /etc/apt/sources.list.d/mediaarea.list; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends bzip2 ca-certificates-mono libcurl4-openssl-dev mediainfo mono-devel mono-vbnc python sqlite3 unzip; \
+    rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 # Install forego
 RUN FOREGO_URL="https://github.com/viranch/forego/releases/download/0.16.2/forego-linux-armv7.tar.gz"; \
     curl -L $FOREGO_URL | tar -C /usr/local/bin/ -zx
 
 # Install Jackett
-RUN mkdir -p /opt/jackett /data/jackett/config; \
+RUN mkdir -p /opt/jackett; \
     JACKETT_RELEASE=`curl -s "https://api.github.com/repos/Jackett/Jackett/releases/latest" | jq -r .tag_name`; \
     JACKETT_URL=`curl -s https://api.github.com/repos/Jackett/Jackett/releases/tags/"${JACKETT_RELEASE}" | jq -r '.assets[].browser_download_url' | grep Mono`; \
     curl -L "$JACKETT_URL" | tar -C /opt/jackett --strip-components=1 -zx
-
-# Install github.com/viranch/tivo
-RUN TIVO_VERSION="0.8"; \
-    TIVO_URL="https://github.com/viranch/tivo/releases/download/$TIVO_VERSION/tivo-linux-armv7-$TIVO_VERSION.tar.gz"; \
-    curl -kL $TIVO_URL | tar -C /usr/local/bin/ -zx
 
 # Setup apache
 RUN for mod in headers proxy proxy_ajp proxy_balancer proxy_connect proxy_ftp proxy_html proxy_http proxy_scgi ssl xml2enc; do a2enmod $mod; done
