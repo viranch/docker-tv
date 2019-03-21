@@ -1,9 +1,16 @@
-FROM lsiobase/mono:xenial
+FROM ubuntu:xenial
 
 # Download & install all required packages
 RUN apt-get update; \
     apt-get install -y --no-install-recommends apache2 apache2-bin transmission-daemon curl ca-certificates cron jq libxml2-utils; \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y apt-transport-https; \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF; \
+    echo "deb http://download.mono-project.com/repo/ubuntu xenial main" > /etc/apt/sources.list.d/mono-official.list; \
+    apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5CDF62C7AE05CC847657390C10E11090EC0E438; \
+    echo "deb https://mediaarea.net/repo/deb/ubuntu xenial main" > /etc/apt/sources.list.d/mediaarea.list; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends bzip2 ca-certificates-mono libcurl4-openssl-dev mediainfo mono-devel mono-vbnc python sqlite3 unzip; \
+    rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 # Install forego
 RUN FOREGO_URL="https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz"; \
