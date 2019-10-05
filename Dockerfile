@@ -2,7 +2,7 @@ FROM ubuntu:xenial
 
 # Download & install all required packages
 RUN apt-get update; \
-    apt-get install -y --no-install-recommends apache2 apache2-bin transmission-daemon curl ca-certificates cron libxml2-utils; \
+    apt-get install -y --no-install-recommends apache2 apache2-bin transmission-daemon curl ca-certificates cron jq libxml2-utils; \
     rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 # Install forego
