@@ -50,11 +50,20 @@
         <div class="row">
           <div class="col-md-12" style="padding-left: 0px;">
             <small><em id="search-status" data-bind="html: status_msg"></em></small>
-            <small class="pull-right" data-bind="visible: free_space().length > 0">
-              <em id="free-space" data-bind="text: 'Free space: '+free_space()"></em>
-              <button type="button" class="anchor-button" id="free-space-refresh" data-loading-text="<i class='icon icon-refresh icon-spin'></i>">
-                <i class="icon icon-refresh"></i>
-              </button>
+            <small class="pull-right">
+              <span data-bind="visible: geo_ip().length > 0">
+                <em id="geo-data" data-bind="text: geo_city"></em>
+                <span> </span>
+                <span data-bind="text: geo_flag()"></span>
+                <span> </span>
+                <em id="geo-data" data-bind="text: '(' + geo_ip() + ')&nbsp;/'"></em>
+              </span>
+              <span data-bind="visible: free_space().length > 0">
+                <em id="free-space" data-bind="text: 'Free space: '+free_space()"></em>
+                <button type="button" class="anchor-button" id="free-space-refresh" data-loading-text="<i class='icon icon-refresh icon-spin'></i>">
+                  <i class="icon icon-refresh"></i>
+                </button>
+              </span>
             </small>
           </div>
         </div>

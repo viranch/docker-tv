@@ -1,4 +1,18 @@
-var ko_data = { query: ko.observable(''), results: ko.observable([]), status_msg: ko.observable('&nbsp;'), free_space: ko.observable(''), jk_api: ko.observable('') };
+function getFlag() {
+    return ko_data.geo_country().toUpperCase().split('').map(x => String.fromCodePoint(127397 + x.charCodeAt(0))).join('');
+}
+
+var ko_data = {
+    query: ko.observable(''),
+    results: ko.observable([]),
+    status_msg: ko.observable('&nbsp;'),
+    free_space: ko.observable(''),
+    jk_api: ko.observable(''),
+    geo_ip: ko.observable(''),
+    geo_city: ko.observable(''),
+    geo_country: ko.observable(''),
+    geo_flag: getFlag
+};
 
 var tr_token;
 var jk_api = "";
@@ -164,6 +178,16 @@ function triggerUriSearch() {
     $('#search-btn').click();
 }
 
+function initKO() {
+    ko_data.jk_api(jk_api);
+
+    $.ajax('/ip/').done(function(data) {
+        ko_data.geo_ip(data.ip);
+        ko_data.geo_city(data.city);
+        ko_data.geo_country(data.country);
+    });
+}
+
 $(document).ready(function() {
     if (jk_api != "") {
         $('#search-form').submit(search);
@@ -182,7 +206,7 @@ $(document).ready(function() {
     $('.anchor-button').focus(function() { $(this).blur(); })
     $('#free-space-refresh').click(refreshFreeSpace);
 
-    ko_data.jk_api(jk_api);
+    initKO();
 
     ko.applyBindings(ko_data);
 
