@@ -78,16 +78,14 @@ function handleResults(query, results) {
 }
 
 function parseJkResults(data) {
-    return data.Results.map(function(item) {
-        return {
-            title: item.Title,
-            link: item.Guid,
-            magnet_link: item.MagnetUri,
-            date: (new Date(item.PublishDate)).toISOString(),
-            size: bytesToSize(Number(item.Size)),
-            seeds: item.Seeders,
-            peers: item.Peers,
-        };
+    return data.Results.filter((x) => x.MagnetUri != null).map((item) => {
+        title: item.Title,
+        link: item.Guid,
+        magnet_link: item.MagnetUri,
+        date: (new Date(item.PublishDate)).toISOString(),
+        size: bytesToSize(Number(item.Size)),
+        seeds: item.Seeders,
+        peers: item.Peers,
     });
 }
 
