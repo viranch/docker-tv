@@ -78,7 +78,7 @@ function handleResults(query, results) {
 }
 
 function parseJkResults(data) {
-    return data.Results.filter((x) => x.MagnetUri != null).map((item) => {
+    return data.Results.filter((x) => x.MagnetUri != null).map((item) => Object({
         title: item.Title,
         link: item.Guid,
         magnet_link: item.MagnetUri,
@@ -86,7 +86,7 @@ function parseJkResults(data) {
         size: bytesToSize(Number(item.Size)),
         seeds: item.Seeders,
         peers: item.Peers,
-    });
+    }));
 }
 
 function showResults(query) {
