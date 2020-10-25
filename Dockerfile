@@ -1,4 +1,4 @@
-FROM ubuntu:xenial
+FROM ubuntu:focal
 
 # Download & install all required packages
 RUN apt-get update; \
