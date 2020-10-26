@@ -1,5 +1,7 @@
 FROM ubuntu:focal
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Download & install all required packages
 RUN apt-get update; \
     apt-get install -y --no-install-recommends apache2 apache2-bin transmission-daemon curl ca-certificates cron jq libxml2-utils; \
