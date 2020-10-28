@@ -228,4 +228,11 @@ function trLoaded() {
 
     // Load free space
     $('#free-space-refresh').click();
+
+    // Setup delete action so that free space status is refreshed
+    var f = trFrame().TransmissionRemote.prototype.removeTorrentsAndData;
+    trFrame().TransmissionRemote.prototype.removeTorrentsAndData = function() {
+        f.apply(this, arguments);
+        $('#free-space-refresh').click();
+    };
 }
