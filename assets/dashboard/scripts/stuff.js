@@ -235,4 +235,13 @@ function trLoaded() {
         f.apply(this, arguments);
         $('#free-space-refresh').click();
     };
+
+    // Setup download finish to refresh free space
+    var g = trFrame().Transmission.prototype.onTorrentChanged;
+    trFrame().Transmission.prototype.onTorrentChanged = function(ev, t) {
+        g.apply(this, arguments);
+        if (t.fields.percentDone == 1) {
+            $('#free-space-refresh').click();
+        }
+    }
 }
