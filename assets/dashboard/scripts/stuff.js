@@ -229,19 +229,21 @@ function trLoaded() {
     // Load free space
     $('#free-space-refresh').click();
 
-    // Setup delete action so that free space status is refreshed
+    // Setup delete action so that free space status and download iframe are refreshed
     var f = trFrame().TransmissionRemote.prototype.removeTorrentsAndData;
     trFrame().TransmissionRemote.prototype.removeTorrentsAndData = function() {
         f.apply(this, arguments);
         $('#free-space-refresh').click();
+        $('#idx-frame').contentWindow.location.reload();
     };
 
-    // Setup download finish to refresh free space
+    // Setup download finish to refresh free space and download iframe
     var g = trFrame().Transmission.prototype.onTorrentChanged;
     trFrame().Transmission.prototype.onTorrentChanged = function(ev, t) {
         g.apply(this, arguments);
         if (t.fields.percentDone == 1) {
             $('#free-space-refresh').click();
+            $('#idx-frame').contentWindow.location.reload();
         }
     }
 }
