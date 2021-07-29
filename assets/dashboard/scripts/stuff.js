@@ -234,7 +234,7 @@ function trLoaded() {
     trFrame().TransmissionRemote.prototype.removeTorrentsAndData = function() {
         f.apply(this, arguments);
         $('#free-space-refresh').click();
-        $('#idx-frame').contentWindow.location.reload();
+        $('#idx-frame')[0].contentWindow.location.reload();
     };
 
     // Setup download finish to refresh free space and download iframe
@@ -243,7 +243,7 @@ function trLoaded() {
         g.apply(this, arguments);
         if (t.fields.percentDone == 1) {
             $('#free-space-refresh').click();
-            $('#idx-frame').contentWindow.location.reload();
+            $('#idx-frame')[0].contentWindow.location.reload();
         }
     }
 }
