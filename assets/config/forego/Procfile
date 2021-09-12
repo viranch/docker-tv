@@ -1,4 +1,4 @@
-transmission: /usr/bin/transmission-daemon -f --config-dir /data/transmission
+transmission: /usr/local/bin/transmission-daemon -f --config-dir /data/transmission
 jackett: /opt/Jackett/jackett
 web: /usr/sbin/apache2ctl -DFOREGROUND
 cron: /usr/sbin/cron -f
