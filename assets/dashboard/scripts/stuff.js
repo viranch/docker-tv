@@ -1,20 +1,26 @@
-function getFlag() {
-    return ko_data.geo_country().toUpperCase().split('').map(x => String.fromCodePoint(127397 + x.charCodeAt(0))).join('');
+// from https://gist.github.com/lanqy/5193417
+// from http://scratch99.com/web-development/javascript/convert-bytes-to-mb-kb/
+function bytesToSize(bytes) {
+    var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes == 0) return '0 B';
+    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+    if (i == 0) return bytes + ' ' + sizes[i];
+    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
 }
 
 var ko_data = {
     query: ko.observable(''),
     results: ko.observable([]),
     status_msg: ko.observable('&nbsp;'),
-    free_space: ko.observable(''),
+    free_space_raw: ko.observable(-1),
+    free_space: () => bytesToSize(ko_data.free_space_raw()),
     jk_api: ko.observable(''),
     geo_ip: ko.observable(''),
     geo_city: ko.observable(''),
     geo_country: ko.observable(''),
-    geo_flag: getFlag
+    geo_flag: () => ko_data.geo_country().toUpperCase().split('').map(x => String.fromCodePoint(127397 + x.charCodeAt(0))).join('')
 };
 
-var tr_token;
 var jk_api = "";
 var search_cache = {};
 
@@ -36,16 +42,6 @@ function getUriParam(param) {
         }
     }
     return null;
-}
-
-// from https://gist.github.com/lanqy/5193417
-// from http://scratch99.com/web-development/javascript/convert-bytes-to-mb-kb/
-function bytesToSize(bytes) {
-    var sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes == 0) return '0 B';
-    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
-    if (i == 0) return bytes + ' ' + sizes[i];
-    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
 }
 
 function search() {
@@ -83,6 +79,7 @@ function parseJkResults(data) {
         link: item.Guid,
         magnet_link: item.MagnetUri,
         date: (new Date(item.PublishDate)).toISOString(),
+        size_raw: Number(item.Size),
         size: bytesToSize(Number(item.Size)),
         seeds: item.Seeders,
         peers: item.Peers,
@@ -124,7 +121,9 @@ function download() {
 
     // backend rolling
     var magnet = anchor.attr('href');
-    var paused = !transmission().shouldAddedTorrentsStart();
+    var size = anchor.attr('data-size');
+    var free_space = ko_data.free_space_raw() - (1024**3); // cap downlaod at free space minus 1GB = 1024^3
+    var paused = !transmission().shouldAddedTorrentsStart() || (size > free_space);
     var o = { method: 'torrent-add', arguments: { filename: magnet, paused: paused } }
 
     transmission().remote.sendRequest(o, function(data) {
@@ -163,7 +162,7 @@ function refreshFreeSpace() {
     var btn = $(this).button('loading');
     downloads_dir = trFrame().$('#download-dir').val();
     transmission().remote.getFreeSpace(downloads_dir, function(path, bytes) {
-        ko_data.free_space(trFrame().Transmission.fmt.size(bytes));
+        ko_data.free_space_raw(bytes);
         $(this).button('reset');
     }, btn);
 }

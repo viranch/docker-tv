@@ -58,7 +58,7 @@
                 <span> </span>
                 <em id="geo-data" data-bind="text: '(' + geo_ip() + ')&nbsp;/'"></em>
               </span>
-              <span data-bind="visible: free_space().length > 0">
+              <span data-bind="visible: free_space_raw() > -1">
                 <em id="free-space" data-bind="text: 'Free space: '+free_space()"></em>
                 <button type="button" class="anchor-button" id="free-space-refresh" data-loading-text="<i class='icon icon-refresh icon-spin'></i>">
                   <i class="icon icon-refresh"></i>
@@ -115,7 +115,7 @@
                   </div>
                 </div>
                 <div class="issue-actions">
-                  <a class="btn btn-small btn-default download-btn" data-bind="attr: { href: magnet_link }" data-loading-text="<i class='icon-spinner icon-spin icon-large'></i>&nbsp;Adding...">
+                  <a class="btn btn-small btn-default download-btn" data-bind="attr: { href: magnet_link, 'data-size': size_raw }" data-loading-text="<i class='icon-spinner icon-spin icon-large'></i>&nbsp;Adding...">
                     <i class="icon icon-download-alt"></i>
                     &nbsp;
                     Download
