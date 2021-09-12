@@ -42,6 +42,17 @@ input.form-control.simple:focus {
   box-shadow: none;
 }
 
+/* touch devices */
+@media (hover: none) {
+  .issue-actions {
+    display: inline-block !important;
+  }
+}
+
+.modal-dialog {
+    max-width: 95%;
+}
+
 /* scrollable modal */
 .modal-dialog{
     overflow-y: initial !important

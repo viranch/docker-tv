@@ -117,8 +117,7 @@
                 <div class="issue-actions">
                   <a class="btn btn-small btn-default download-btn" data-bind="attr: { href: magnet_link, 'data-size': size_raw }" data-loading-text="<i class='icon-spinner icon-spin icon-large'></i>&nbsp;Adding...">
                     <i class="icon icon-download-alt"></i>
-                    &nbsp;
-                    Download
+                    <span data-bind="if: !$root.is_mobile()">&nbsp;Download</span>
                   </a>
                 </div>
               </li>

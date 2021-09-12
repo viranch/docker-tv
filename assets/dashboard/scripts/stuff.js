@@ -18,7 +18,8 @@ var ko_data = {
     geo_ip: ko.observable(''),
     geo_city: ko.observable(''),
     geo_country: ko.observable(''),
-    geo_flag: () => ko_data.geo_country().toUpperCase().split('').map(x => String.fromCodePoint(127397 + x.charCodeAt(0))).join('')
+    geo_flag: () => ko_data.geo_country().toUpperCase().split('').map(x => String.fromCodePoint(127397 + x.charCodeAt(0))).join(''),
+    is_mobile: ko.observable(false)
 };
 
 var jk_api = "";
@@ -129,11 +130,12 @@ function download() {
     transmission().remote.sendRequest(o, function(data) {
         anchor.button('reset');
         if (data.result == "success") {
+            msg = ko_data.is_mobile() ? '' : '&nbsp;Added to download&nbsp;<i class="icon icon-chevron-right"></i>';
             anchor
                 .unbind('click')
                 .removeClass("btn-default")
                 .addClass("btn-info")
-                .html('<i class="icon icon-ok"></i>&nbsp;Added to download&nbsp;<i class="icon icon-chevron-right"></i>')
+                .html('<i class="icon icon-ok"></i>' + msg)
                 .click(function() {
                     $('#results').modal('hide');
                     return false;
@@ -183,6 +185,9 @@ function initKO() {
         ko_data.geo_city(data.city);
         ko_data.geo_country(data.country);
     });
+
+    // https://stackoverflow.com/a/24600597
+    ko_data.is_mobile(/Mobi|Android/i.test(navigator.userAgent));
 }
 
 $(document).ready(function() {
