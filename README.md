@@ -43,7 +43,7 @@ docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.i
 
 - [OPTIONAL] For getting push notifications of download complete on your phone, there are various options:
   - Install the one of the Transmission Andoird apps ([Remote Transmission](https://play.google.com/store/apps/details?id=com.neogb.rtac) or [Transmission Remote](https://play.google.com/store/apps/details?id=net.yupol.transmissionremote.app)) and configure the remote server, then enable download finished notifications in app settings.
-  - If you have an iPhone, the other alternate is [PushBullet](https://www.pushbullet.com/). The image has in-built support for PushBullet, just declare your API token as `PB_TOKEN` environment variable.
+  - Another alternate is to use [PushBullet](https://www.pushbullet.com/). The image has in-built support for PushBullet, just declare your API token as `PB_TOKEN` environment variable.
 ```
 docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.info/user/XXXXXXX.rss -e PB_TOKEN=XXXXX ghcr.io/viranch/tv
 ```
