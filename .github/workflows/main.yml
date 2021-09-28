@@ -15,14 +15,13 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
+      - name: docker login
+        run: echo $GH_TOKEN | docker login ghcr.io -u viranch --password-stdin
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: docker build
         run: docker build -t ghcr.io/viranch/tv .
-
-      - name: docker login
-        uses: docker/login-action@v1 
-        with:
-          username: viranch
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: docker push
         run: docker push ghcr.io/viranch/tv
