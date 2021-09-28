@@ -33,24 +33,24 @@ Entertainment automation for homelabs on docker
 
 - Run the container:
 ```
-docker run -d --name tv -v $PWD/data:/data -p 80:80 vrnch.azurecr.io/tv
+docker run -d --name tv -v $PWD/data:/data -p 80:80 ghcr.io/viranch/tv
 ```
 
 - [OPTIONAL] To use episode download automation, create an account on [showRSS](https://showrss.info/) and add your favourite shows. Get the link to the RSS feed from "My Feed" tab, it should be of the form: `http://showrss.info/user/XXXXXXX.rss`. Pass this link as `RSS_FEED` environment variable:
 ```
-docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.info/user/XXXXXXX.rss vrnch.azurecr.io/tv
+docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.info/user/XXXXXXX.rss ghcr.io/viranch/tv
 ```
 
 - [OPTIONAL] For getting push notifications of download complete on your phone, there are various options:
   - Install the one of the Transmission Andoird apps ([Remote Transmission](https://play.google.com/store/apps/details?id=com.neogb.rtac) or [Transmission Remote](https://play.google.com/store/apps/details?id=net.yupol.transmissionremote.app)) and configure the remote server, then enable download finished notifications in app settings.
   - If you have an iPhone, the other alternate is [PushBullet](https://www.pushbullet.com/). The image has in-built support for PushBullet, just declare your API token as `PB_TOKEN` environment variable.
 ```
-docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.info/user/XXXXXXX.rss -e PB_TOKEN=XXXXX vrnch.azurecr.io/tv
+docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.info/user/XXXXXXX.rss -e PB_TOKEN=XXXXX ghcr.io/viranch/tv
 ```
 
 - [OPTIONAL] To protect your container, you can also set a username & password for basic authentication, using the `AUTH_USER` & `AUTH_PASS` environment variables:
 ```
-docker run [...] -e AUTH_USER=bob -e AUTH_PASS=myprecious [...] vrnch.azurecr.io/tv
+docker run [...] -e AUTH_USER=bob -e AUTH_PASS=myprecious [...] ghcr.io/viranch/tv
 ```
 
 - Navigate to `http://your-ip/`. You can change the port with the `-p` switch, eg: `-p 8000:80`.
