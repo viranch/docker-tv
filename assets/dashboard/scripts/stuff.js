@@ -241,13 +241,16 @@ function trLoaded() {
         $('#idx-frame')[0].contentWindow.location.reload();
     };
 
+    /* this causes infinite refresh when torrents are seeding
     // Setup download finish to refresh free space and download iframe
     var g = trFrame().Transmission.prototype.onTorrentChanged;
     trFrame().Transmission.prototype.onTorrentChanged = function(ev, t) {
         g.apply(this, arguments);
+        console.log(t.fields);
         if (t.fields.percentDone == 1) {
             $('#free-space-refresh').click();
             $('#idx-frame')[0].contentWindow.location.reload();
         }
     }
+    */
 }
