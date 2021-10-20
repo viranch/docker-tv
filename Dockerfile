@@ -20,8 +20,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /var/tmp/* /tmp/*
 
 # Install forego
-RUN FOREGO_URL="https://bin.equinox.io/c/ekMN3bCZFUn/forego-stable-linux-amd64.tgz"; \
-    curl -kL $FOREGO_URL | tar -C /usr/local/bin/ -zx
+RUN FOREGO_URL="https://github.com/viranch/forego/releases/download/20211019/forego-linux-amd64.tgz"; \
+    curl -L $FOREGO_URL | tar -C /usr/local/bin/ -zx
 
 # Install Jackett
 RUN JACKETT_VERSION="$(curl -s https://api.github.com/repos/Jackett/Jackett/releases | jq -r '.[0].name')"; \
