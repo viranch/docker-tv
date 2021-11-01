@@ -253,4 +253,7 @@ function trLoaded() {
         }
     }
     */
+
+    // Set remove button to trash data also
+    trFrame().$('#toolbar-remove').click($.proxy(transmission().removeSelectedTorrentsAndData, transmission()))
 }
