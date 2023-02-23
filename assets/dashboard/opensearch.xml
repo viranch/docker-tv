@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
- <ShortName>Download search</ShortName>
- <Description>Download engine</Description>
- <InputEncoding>UTF-8</InputEncoding>
- <Url type="text/html" template="/?q={searchTerms}" />
- <Url type="application/x-suggestions+json" template="/tz/suggestions.php?q={searchTerms}" />
- <Image height="16" width="16" type="image/x-icon">/favicon.ico</Image>
-</OpenSearchDescription>

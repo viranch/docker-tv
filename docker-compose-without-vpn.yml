@@ -1,0 +1,30 @@
+transmission:
+  image: ghcr.io/viranch/transmission
+  restart: always
+  net: "container:tordash"
+  environment:
+    PUSHOVER_APP_TOKEN: ''
+    PUSHOVER_USER_KEY: ''
+    HOSTNAME: myserver
+  volumes:
+    - /opt/tv/transmission:/data
+
+jackett:
+  image:  ghcr.io/viranch/jackett
+  restart: always
+  net: "container:tordash"
+  volumes:
+    - /opt/tv/jackett:/config
+
+tordash:
+  image: ghcr.io/viranch/tordash
+  restart: always
+  container_name: tordash
+  environment:
+    AUTH_USER: ''
+    AUTH_PASS: ''
+  ports:
+    - "80:80"
+  volumes:
+    - /opt/tv/transmission/downloads:/data:ro
+    - /opt/tv/jackett:/jackett:ro

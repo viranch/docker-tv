@@ -1,0 +1,40 @@
+vpn:
+  build: ./wireguard # see https://github.com/viranch/docker-compose-files/tree/master/vps/wireguard
+  container_name: vpn
+  volumes:
+    - ./wireguard/wg0.conf:/etc/wireguard/wg0.conf
+  ports:
+    - "80:80" # the 'tordash' container is listening on this port
+  cap_add:
+    - NET_ADMIN
+    - SYS_MODULE
+  privileged: true
+
+transmission:
+  image: ghcr.io/viranch/transmission
+  restart: always
+  net: "container:vpn"
+  environment:
+    PUSHOVER_APP_TOKEN: ''
+    PUSHOVER_USER_KEY: ''
+    HOSTNAME: myserver
+  volumes:
+    - /opt/tv/transmission:/data
+
+jackett:
+  image:  ghcr.io/viranch/jackett
+  restart: always
+  net: "container:vpn"
+  volumes:
+    - /opt/tv/jackett:/config
+
+tordash:
+  image: ghcr.io/viranch/tordash
+  restart: always
+  net: "container:vpn"
+  environment:
+    AUTH_USER: ''
+    AUTH_PASS: ''
+  volumes:
+    - /opt/tv/transmission/downloads:/data:ro
+    - /opt/tv/jackett:/jackett:ro
