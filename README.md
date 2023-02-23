@@ -42,10 +42,10 @@ docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.i
 ```
 
 - [OPTIONAL] For getting push notifications of download complete on your phone, there are various options:
-  - Install the one of the Transmission Andoird apps ([Remote Transmission](https://play.google.com/store/apps/details?id=com.neogb.rtac) or [Transmission Remote](https://play.google.com/store/apps/details?id=net.yupol.transmissionremote.app)) and configure the remote server, then enable download finished notifications in app settings.
-  - Another alternate is to use [PushBullet](https://www.pushbullet.com/). The image has in-built support for PushBullet, just declare your API token as `PB_TOKEN` environment variable.
+  - Install the one of the Transmission Android apps ([Remote Transmission](https://play.google.com/store/apps/details?id=com.neogb.rtac) or [Transmission Remote](https://play.google.com/store/apps/details?id=net.yupol.transmissionremote.app)) and configure the remote server, then enable download finished notifications in app settings.
+  - Another alternate is to use [Pushover](https://www.pushover.net/). The image has in-built support for Pushover, just declare your API token as `PUSHOVER_APP_TOKEN` environment variable and user key as `PUSHOVER_USER_KEY` env var.
 ```
-docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.info/user/XXXXXXX.rss -e PB_TOKEN=XXXXX ghcr.io/viranch/tv
+docker run -d --name tv -v $PWD/data:/data -p 80:80 -e RSS_FEED=http://showrss.info/user/XXXXXXX.rss -e PUSHOVER_APP_TOKEN=XXXXX -e PUSHOVER_USER_KEY=YYYYY ghcr.io/viranch/tv
 ```
 
 - [OPTIONAL] To protect your container, you can also set a username & password for basic authentication, using the `AUTH_USER` & `AUTH_PASS` environment variables:
