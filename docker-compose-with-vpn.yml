@@ -22,9 +22,14 @@ transmission:
     - /opt/tv/transmission:/data
 
 jackett:
-  image:  ghcr.io/viranch/jackett
+  image: lscr.io/linuxserver/jackett
   restart: always
   net: "container:vpn"
+  environment:
+    PUID: 0
+    PGID: 0
+    TZ: Etc/UTC # adjust this
+    AUTO_UPDATE: "true"
   volumes:
     - /opt/tv/jackett:/config
 
